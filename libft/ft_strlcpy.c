@@ -6,7 +6,7 @@
 /*   By: njegat <njegat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/30 20:44:55 by njegat            #+#    #+#             */
-/*   Updated: 2022/09/30 20:57:28 by njegat           ###   ########.fr       */
+/*   Updated: 2023/02/02 16:03:43 by njegat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 	size_t	i;
 
 	i = 0;
-	if (size > 0)
+	if (size > 0 && src)
 	{
 		while (src[i] != '\0' && i < size - 1)
 		{

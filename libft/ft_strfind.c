@@ -1,25 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_strfind.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: njegat <njegat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/27 20:10:12 by njegat            #+#    #+#             */
-/*   Updated: 2023/02/02 08:40:50 by njegat           ###   ########.fr       */
+/*   Created: 2023/02/13 15:54:28 by njegat            #+#    #+#             */
+/*   Updated: 2023/02/13 15:55:10 by njegat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlen(const char *s)
+int	ft_strfind(const char *s, int c)
 {
-	size_t	i;
+	int		i;
+	char	search;
 
 	if (!s)
 		return (0);
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
+	search = (char)c;
+	i = ft_strlen(s);
+	while (i >= 0)
+	{
+		if (s[i] == search)
+			return (i);
+		i--;
+	}
+	return (0);
 }

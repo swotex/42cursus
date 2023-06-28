@@ -6,7 +6,7 @@
 /*   By: njegat <njegat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 15:55:59 by njegat            #+#    #+#             */
-/*   Updated: 2023/01/24 16:33:53 by njegat           ###   ########.fr       */
+/*   Updated: 2023/02/13 16:01:41 by njegat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1024
+#  define BUFFER_SIZE 1
 # endif
 
 int			ft_isalpha(int c);
@@ -76,5 +76,9 @@ int			ft_linelen(char *s);
 char		*ft_cutline(char *line);
 char		*ft_cutsave(char *line);
 int			ft_atoi_base(char *s, int base);
+void		ft_double_free(char **str);
+int			ft_strcmp(char *str1, char *str2);
+int			ft_strfind(const char *s, int c);
+char		*ft_get_line(int fd);
 
 #endif

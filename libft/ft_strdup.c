@@ -6,7 +6,7 @@
 /*   By: njegat <njegat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 01:22:43 by njegat            #+#    #+#             */
-/*   Updated: 2022/10/15 22:50:24 by njegat           ###   ########.fr       */
+/*   Updated: 2023/02/10 10:16:36 by njegat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ char	*ft_strdup(const char *s)
 	output = malloc(sizeof(char) * ft_strlen(s) + 1);
 	if (!(output))
 		return (NULL);
-	ft_strlcpy (output, s, ft_strlen(s) + 1);
+	ft_memcpy(output, s, ft_strlen(s));
+	output[ft_strlen(s)] = 0;
 	return (output);
 }
