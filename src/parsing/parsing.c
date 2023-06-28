@@ -1,31 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strfind.c                                       :+:      :+:    :+:   */
+/*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: njegat <njegat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/13 15:54:28 by njegat            #+#    #+#             */
-/*   Updated: 2023/05/03 15:22:01 by njegat           ###   ########.fr       */
+/*   Created: 2023/03/17 10:36:00 by njegat            #+#    #+#             */
+/*   Updated: 2023/04/21 16:38:46 by ltuffery         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../include/parsing.h"
 
-int	ft_strfind(const char *s, int c)
+int	parsing_handler(char *prompt)
 {
-	int		i;
-	char	search;
-
-	if (s == NULL)
-		return (0);
-	search = (char)c;
-	i = ft_strlen(s);
-	while (i >= 0)
-	{
-		if (s[i] == search)
-			return (1);
-		i--;
-	}
+	if (check_quote(prompt))
+		return (1);
+	if (check_pipe(prompt))
+		return (1);
+	if (check_redirecting(prompt))
+		return (1);
 	return (0);
 }

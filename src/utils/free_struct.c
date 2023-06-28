@@ -1,31 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strfind.c                                       :+:      :+:    :+:   */
+/*   free_struct.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: njegat <njegat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/13 15:54:28 by njegat            #+#    #+#             */
-/*   Updated: 2023/05/03 15:22:01 by njegat           ###   ########.fr       */
+/*   Created: 2023/03/18 13:09:01 by njegat            #+#    #+#             */
+/*   Updated: 2023/04/20 16:26:46 by njegat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../include/utils.h"
 
-int	ft_strfind(const char *s, int c)
+void	free_struct(t_cmd **cmd)
 {
-	int		i;
-	char	search;
+	t_cmd	*tmp;
+	t_file	*tmp_file;
 
-	if (s == NULL)
-		return (0);
-	search = (char)c;
-	i = ft_strlen(s);
-	while (i >= 0)
+	while (*cmd)
 	{
-		if (s[i] == search)
-			return (1);
-		i--;
+		ft_double_free((*cmd)->arg);
+		while ((*cmd)->file)
+		{
+			free((*cmd)->file->name);
+			tmp_file = (*cmd)->file;
+			(*cmd)->file = (*cmd)->file->next;
+			free(tmp_file);
+		}
+		tmp = (*cmd);
+		*cmd = (*cmd)->next;
+		free(tmp);
 	}
-	return (0);
 }

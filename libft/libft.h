@@ -6,7 +6,7 @@
 /*   By: njegat <njegat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 15:55:59 by njegat            #+#    #+#             */
-/*   Updated: 2023/02/13 16:01:41 by njegat           ###   ########.fr       */
+/*   Updated: 2023/03/21 15:44:18 by ltuffery         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 # define LIBFT_H
 # include <stdlib.h>
 # include <unistd.h>
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 1
-# endif
 
 int			ft_isalpha(int c);
 int			ft_isdigit(int c);
@@ -53,32 +50,15 @@ void		ft_putchar_fd(char c, int fd);
 void		ft_putstr_fd(char *s, int fd);
 void		ft_putendl_fd(char *s, int fd);
 void		ft_putnbr_fd(int n, int fd);
+char		**ft_strappend(char *add, char **in);
 
-typedef struct s_list
-{
-	void			*content;
-	struct s_list	*next;
-}	t_list;
-
-t_list		*ft_lstnew(void *content);
-void		ft_lstadd_front(t_list **lst, t_list *new);
-int			ft_lstsize(t_list *lst);
-t_list		*ft_lstlast(t_list *lst);
-void		ft_lstadd_back(t_list **lst, t_list *new);
-void		ft_lstdelone(t_list *lst, void (*del)(void *));
-void		ft_lstclear(t_list **lst, void (*del)(void *));
-void		ft_lstiter(t_list *lst, void (*f)(void *));
-t_list		*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
-char		*get_next_line(int fd);
-char		*ft_newline(int fd, char *line);
 int			ft_strfind(const char *s, int c);
-int			ft_linelen(char *s);
-char		*ft_cutline(char *line);
-char		*ft_cutsave(char *line);
 int			ft_atoi_base(char *s, int base);
 void		ft_double_free(char **str);
 int			ft_strcmp(char *str1, char *str2);
 int			ft_strfind(const char *s, int c);
 char		*ft_get_line(int fd);
+
+size_t		ft_count(char **arr);
 
 #endif

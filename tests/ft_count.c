@@ -1,31 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strfind.c                                       :+:      :+:    :+:   */
+/*   ft_count.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: njegat <njegat@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ltuffery <ltuffery@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/13 15:54:28 by njegat            #+#    #+#             */
-/*   Updated: 2023/05/03 15:22:01 by njegat           ###   ########.fr       */
+/*   Created: 2023/03/21 16:08:54 by ltuffery          #+#    #+#             */
+/*   Updated: 2023/03/21 16:11:41 by ltuffery         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../libft/libft.h"
+#include <stddef.h>
+#include <stdio.h>
 
-int	ft_strfind(const char *s, int c)
+int	main(int ac, char **av, char **env)
 {
-	int		i;
-	char	search;
+	size_t	i;
 
-	if (s == NULL)
-		return (0);
-	search = (char)c;
-	i = ft_strlen(s);
-	while (i >= 0)
-	{
-		if (s[i] == search)
-			return (1);
-		i--;
-	}
-	return (0);
+	(void) ac;
+	(void) av;
+	i = ft_count(env);
+	printf("\n%zu\n", i);
 }

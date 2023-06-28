@@ -1,31 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strfind.c                                       :+:      :+:    :+:   */
+/*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: njegat <njegat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/13 15:54:28 by njegat            #+#    #+#             */
-/*   Updated: 2023/05/03 15:22:01 by njegat           ###   ########.fr       */
+/*   Created: 2023/03/17 18:39:07 by njegat            #+#    #+#             */
+/*   Updated: 2023/04/24 16:44:50 by ltuffery         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../include/lexer.h"
 
-int	ft_strfind(const char *s, int c)
+void	lexer_handler(t_data *data, char *prompt)
 {
-	int		i;
-	char	search;
-
-	if (s == NULL)
-		return (0);
-	search = (char)c;
-	i = ft_strlen(s);
-	while (i >= 0)
-	{
-		if (s[i] == search)
-			return (1);
-		i--;
-	}
-	return (0);
+	data->cmd = cut_prompt(data, prompt);
+	files_handler(data);
 }

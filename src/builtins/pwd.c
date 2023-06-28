@@ -1,31 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strfind.c                                       :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: njegat <njegat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/13 15:54:28 by njegat            #+#    #+#             */
-/*   Updated: 2023/05/03 15:22:01 by njegat           ###   ########.fr       */
+/*   Created: 2023/03/17 15:20:55 by ltuffery          #+#    #+#             */
+/*   Updated: 2023/05/03 18:11:57 by njegat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <limits.h>
+#include <stdio.h>
+#include <unistd.h>
 
-int	ft_strfind(const char *s, int c)
+int	pwd_builtins(void)
 {
-	int		i;
-	char	search;
+	char	cwd[PATH_MAX];
 
-	if (s == NULL)
-		return (0);
-	search = (char)c;
-	i = ft_strlen(s);
-	while (i >= 0)
+	if (getcwd(cwd, sizeof(cwd)) == NULL)
 	{
-		if (s[i] == search)
-			return (1);
-		i--;
+		perror("error cwd");
+		return (1);
 	}
+	else
+		printf("%s\n", cwd);
 	return (0);
 }

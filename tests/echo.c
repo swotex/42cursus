@@ -1,31 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strfind.c                                       :+:      :+:    :+:   */
+/*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: njegat <njegat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/13 15:54:28 by njegat            #+#    #+#             */
-/*   Updated: 2023/05/03 15:22:01 by njegat           ###   ########.fr       */
+/*   Created: 2023/03/17 15:43:52 by ltuffery          #+#    #+#             */
+/*   Updated: 2023/03/17 18:06:03 by njegat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../include/minishell.h"
 
-int	ft_strfind(const char *s, int c)
+int	main(void)
 {
-	int		i;
-	char	search;
+	const char	*argv1[] = {"echo", "oui", "non", "test", NULL};
+	const char	*argv2[] = {"echo", "--nnn", "oui", "non", "test", NULL};
+	const char	*argv3[] = {"echo", "-nnn", "oui", "non", "test", NULL};
 
-	if (s == NULL)
-		return (0);
-	search = (char)c;
-	i = ft_strlen(s);
-	while (i >= 0)
-	{
-		if (s[i] == search)
-			return (1);
-		i--;
-	}
-	return (0);
+	echo_builtins(argv1);
+	echo_builtins(argv2);
+	echo_builtins(argv3);
 }

@@ -1,31 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strfind.c                                       :+:      :+:    :+:   */
+/*   ft_strappend.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: njegat <njegat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/13 15:54:28 by njegat            #+#    #+#             */
-/*   Updated: 2023/05/03 15:22:01 by njegat           ###   ########.fr       */
+/*   Created: 2022/11/28 12:55:56 by ltuffery          #+#    #+#             */
+/*   Updated: 2023/04/27 05:56:24 by njegat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_strfind(const char *s, int c)
+char	**ft_strappend(char *add, char **in)
 {
+	char	**new_tab;
 	int		i;
-	char	search;
 
-	if (s == NULL)
-		return (0);
-	search = (char)c;
-	i = ft_strlen(s);
-	while (i >= 0)
+	if (in == NULL)
 	{
-		if (s[i] == search)
-			return (1);
-		i--;
+		new_tab = ft_calloc(2, sizeof(char *));
+		new_tab[0] = ft_strdup(add);
+		return (new_tab);
 	}
-	return (0);
+	i = 0;
+	while (in[i] != NULL)
+		i++;
+	new_tab = ft_calloc(i + 2, sizeof(char *));
+	i = 0;
+	while (in[i] != NULL)
+	{
+		new_tab[i] = in[i];
+		i++;
+	}
+	new_tab[i] = ft_strdup(add);
+	new_tab[i + 1] = NULL;
+	free(in);
+	return (new_tab);
 }

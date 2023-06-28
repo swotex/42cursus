@@ -1,31 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strfind.c                                       :+:      :+:    :+:   */
+/*   simple_exec_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: njegat <njegat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/13 15:54:28 by njegat            #+#    #+#             */
-/*   Updated: 2023/05/03 15:22:01 by njegat           ###   ########.fr       */
+/*   Created: 2023/04/08 08:35:09 by njegat            #+#    #+#             */
+/*   Updated: 2023/04/13 14:21:10 by njegat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../../include/execute.h"
 
-int	ft_strfind(const char *s, int c)
+void	simple_dup_handler(t_cmd *cmd)
 {
-	int		i;
-	char	search;
-
-	if (s == NULL)
-		return (0);
-	search = (char)c;
-	i = ft_strlen(s);
-	while (i >= 0)
-	{
-		if (s[i] == search)
-			return (1);
-		i--;
-	}
-	return (0);
+	if (cmd->fd_infile >= 0)
+		if (dup2(cmd->fd_infile, 0) == -1)
+			perror("minishoul: dup2");
+	if (cmd->fd_outfile >= 0)
+		if (dup2(cmd->fd_outfile, 1) == -1)
+			perror("minishoul: dup2");
 }
