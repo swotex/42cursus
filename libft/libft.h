@@ -6,7 +6,7 @@
 /*   By: njegat <njegat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 15:55:59 by njegat            #+#    #+#             */
-/*   Updated: 2022/12/09 14:09:31 by njegat           ###   ########.fr       */
+/*   Updated: 2023/01/24 16:33:53 by njegat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 # define LIBFT_H
 # include <stdlib.h>
 # include <unistd.h>
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 1024
+# endif
 
 int			ft_isalpha(int c);
 int			ft_isdigit(int c);
@@ -66,5 +69,12 @@ void		ft_lstdelone(t_list *lst, void (*del)(void *));
 void		ft_lstclear(t_list **lst, void (*del)(void *));
 void		ft_lstiter(t_list *lst, void (*f)(void *));
 t_list		*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
+char		*get_next_line(int fd);
+char		*ft_newline(int fd, char *line);
+int			ft_strfind(const char *s, int c);
+int			ft_linelen(char *s);
+char		*ft_cutline(char *line);
+char		*ft_cutsave(char *line);
+int			ft_atoi_base(char *s, int base);
 
 #endif

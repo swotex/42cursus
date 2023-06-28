@@ -5,66 +5,77 @@
 #                                                     +:+ +:+         +:+      #
 #    By: njegat <njegat@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/12/07 12:23:36 by njegat            #+#    #+#              #
-#    Updated: 2023/01/25 15:40:24 by njegat           ###   ########.fr        #
+#    Created: 2023/01/09 14:01:26 by njegat            #+#    #+#              #
+#    Updated: 2023/01/31 07:40:10 by njegat           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = push_swap
-
-BNAME = checker
+NAME = fdf
 
 CC = clang
 
 FLAGS = -Werror -Wextra -Wall
 
-SRC = push_swap.c \
-		error.c \
-		error_suit.c \
-		swap.c \
-		stack_list.c \
-		little_sort.c \
-		utils.c \
-		utils_suit.c \
-		sort_all.c \
-		instruction.c
-
-BSRC = checker_bonus/ft_checker.c \
-		checker_bonus/error_bonus.c \
-		checker_bonus/error_suit_bonus.c \
-		checker_bonus/stack_list.c \
-		checker_bonus/swap.c \
-		checker_bonus/utils.c \
-		checker_bonus/gnl/get_next_line.c \
-		checker_bonus/gnl/get_next_line_utils.c
-
 LINK_LIB = libft/
 
 NAME_LIB = libft.a
 
-$(NAME):
+SRC = src/fdf.c \
+		src/hooks.c \
+		src/draw_line.c \
+		src/parse_data.c \
+		src/free_utils.c \
+		src/utils.c \
+		src/matrix_set.c \
+		src/display.c \
+		src/rotate.c \
+		src/utils_suit.c
+
+BSRC = bonus/fdf_bonus.c \
+		bonus/hooks_bonus.c \
+		bonus/draw_line_bonus.c \
+		bonus/parse_data_bonus.c \
+		bonus/free_utils_bonus.c \
+		bonus/utils_bonus.c \
+		bonus/matrix_set_bonus.c \
+		bonus/display_bonus.c \
+		bonus/rotate_bonus.c \
+		bonus/color_set_bonus.c \
+		bonus/legend_bonus.c \
+		bonus/hooks_suit_bonus.c \
+		bonus/utils_suit_bonus.c
+
+OBJ = $(SRC:%.c=%.o)
+BOBJ = $(BSRC:%.c=%.o)
+
+%.o: %.c
+	@$(CC) -Wall -Wextra -Werror -I/usr/include -Imlx_linux -O3 -g -c $< -o $@
+
+$(NAME): $(OBJ)
 	@make -s -C $(LINK_LIB)
-	@echo "\033[4;32m--- libft archive created ---\n\033[0m"
-	@$(CC) $(FLAGS) $(SRC) $(LINK_LIB)$(NAME_LIB) -o $(NAME)
+	@make -s -C mlx_linux/
+	@$(CC) $(OBJ) -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz $(LINK_LIB)$(NAME_LIB) -o $(NAME)
 	@echo "\033[4;32m--- executable created ---\n\033[0m"
 
 all: $(NAME)
 
-$(BNAME):
+bonus: $(BOBJ)
 	@make -s -C $(LINK_LIB)
-	@echo "\033[4;32m--- libft archive created ---\n\033[0m"
-	@$(CC) $(FLAGS) $(BSRC) $(LINK_LIB)$(NAME_LIB) -o $(BNAME)
-	@echo "\033[4;32m--- executable bonus created ---\n\033[0m"
+	@make -s -C mlx_linux/
+	@$(CC) $(BOBJ) -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz $(LINK_LIB)$(NAME_LIB) -o $(NAME)
+	@echo "\033[4;32m--- executable created ---\n\033[0m"
 
-bonus: $(BNAME)
-
-clean: 
+clean:
+	@rm -rf $(OBJ)
+	@rm -rf $(BOBJ)
 	@make -s -C $(LINK_LIB) clean
-	@echo "\033[4;35m--- -.o files have been deleted ---\n\033[0m"
 
-fclean:
+fclean: clean
+	@rm -rf $(NAME)
 	@make -s -C $(LINK_LIB) fclean
-	@rm -rf $(NAME) $(BNAME)
+	@make -s -C mlx_linux/ clean
 	@echo "\033[4;35m--- all creations have been deleted ---\n\033[0m"
 
 re: fclean all
+
+.PHONY: all clean fclean re bonus

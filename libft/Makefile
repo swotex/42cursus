@@ -35,7 +35,10 @@ SRC =	ft_bzero.c \
 		ft_putchar_fd.c \
 		ft_putstr_fd.c \
 		ft_putendl_fd.c \
-		ft_putnbr_fd.c
+		ft_putnbr_fd.c \
+		get_next_line.c \
+		get_next_line_utils.c \
+		ft_atoi_base.c
 
 BSRC =	ft_lstnew.c \
 		ft_lstadd_front.c \
