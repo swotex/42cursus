@@ -6,15 +6,15 @@
 #    By: njegat <njegat@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/11 10:20:47 by njegat            #+#    #+#              #
-#    Updated: 2023/05/26 18:58:59 by njegat           ###   ########.fr        #
+#    Updated: 2023/07/10 23:46:38 by njegat           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = account
 
-CC = c++
+CXX = c++
 
-FLAGS = -Werror -Wextra -Wall -std=c++98
+CXXFLAGS = -Werror -Wextra -Wall -std=c++98
 
 SRC = 	Account.cpp \
 		tests.cpp
@@ -22,10 +22,10 @@ SRC = 	Account.cpp \
 OBJ = $(SRC:%.cpp=%.o)
 
 %.o: %.c
-	@$(CC) $(FLAGS) -c $< -o $@
+	@$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(NAME): $(OBJ)
-	@$(CC) $(FLAGS) $(OBJ)  -o $(NAME)
+	@$(CXX) $(CXXFLAGS) $(OBJ)  -o $(NAME)
 	@echo "\033[4;32m--- executable created ---\n\033[0m"
 
 all: $(NAME)

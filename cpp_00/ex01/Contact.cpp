@@ -6,7 +6,7 @@
 /*   By: njegat <njegat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 09:05:05 by njegat            #+#    #+#             */
-/*   Updated: 2023/05/16 14:58:45 by njegat           ###   ########.fr       */
+/*   Updated: 2023/06/30 14:47:35 by njegat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void Contact::printContact()
 {
 	std::cout << "First name = " << this->fName << std::endl;
 	std::cout << "Last name = " << this->lName << std::endl;
-	std::cout << "Nicknae = " << this->nickName << std::endl;
+	std::cout << "Nickname = " << this->nickName << std::endl;
 	std::cout << "Phone number = " << this->number << std::endl;
 	std::cout << "Darkest secret = " << this->darkestSecret << std::endl;
 }

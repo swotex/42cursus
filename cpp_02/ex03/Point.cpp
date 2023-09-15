@@ -6,7 +6,7 @@
 /*   By: njegat <njegat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 16:05:50 by njegat            #+#    #+#             */
-/*   Updated: 2023/06/16 17:40:55 by njegat           ###   ########.fr       */
+/*   Updated: 2023/07/10 23:14:22 by njegat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,20 @@ Point::Point(const float nbx, const float nby): x(Fixed(nbx)), y(Fixed(nby)){}
 
 Point::Point(const Point &cpy): x(cpy.x), y(cpy.y){}
 
-Point & Point::operator = (const Point &pt){}
+Point & Point::operator = (const Point &pt)
+{
+	(void)pt;
+	return (*this);
+}
 
-// void	Point::setPointX(Fixed nbx);
+Fixed	Point::getPointX()
+{
+	return (this->x);
+}
 
-// void	Point::setPointY(Fixed nby);
+Fixed	Point::getPointY()
+{
+	return (this->y);
+}
 
-Fixed	Point::getPointX();
-
-Fixed	Point::getPointY();
-
-Point::~Point();
+Point::~Point(){}

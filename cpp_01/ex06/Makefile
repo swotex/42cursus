@@ -6,15 +6,15 @@
 #    By: njegat <njegat@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/11 10:20:47 by njegat            #+#    #+#              #
-#    Updated: 2023/06/09 08:41:27 by njegat           ###   ########.fr        #
+#    Updated: 2023/07/10 23:48:25 by njegat           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = harlFilter
 
-CC = c++
+CXX = c++
 
-FLAGS = -Werror -Wextra -Wall -std=c++98
+CXXFLAGS = -Werror -Wextra -Wall -std=c++98
 
 SRC =	main.cpp \
 		Harl.cpp
@@ -22,10 +22,10 @@ SRC =	main.cpp \
 OBJ = $(SRC:%.cpp=%.o)
 
 %.o: %.c
-	@$(CC) $(FLAGS) -c $< -o $@
+	@$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(NAME): $(OBJ)
-	@$(CC) $(FLAGS) $(OBJ)  -o $(NAME)
+	@$(CXX) $(CXXFLAGS) $(OBJ)  -o $(NAME)
 	@echo "\033[4;32m--- executable created ---\n\033[0m"
 
 all: $(NAME)

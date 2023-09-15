@@ -6,7 +6,7 @@
 /*   By: njegat <njegat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 07:41:49 by njegat            #+#    #+#             */
-/*   Updated: 2023/06/09 08:29:34 by njegat           ###   ########.fr       */
+/*   Updated: 2023/07/26 19:07:37 by njegat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,32 @@ void	Harl::complain(std::string level)
 {
 	std::string	check[] = {"DEBUG", "INFO", "WARNING", "ERROR"};
 	void		(Harl::*func[])() = {&Harl::debug, &Harl::info, &Harl::warning, &Harl::error};
+	int			i = 0;
 
-	for (int i=0; i < 4; i++)
+	while (i < 4)
 	{
-		if (check[i] == level)
-		{
-			for (int j=i; j < 4; j++)
-				(this->*func[j])();
-		}
+		if(check[i] == level)
+			break;
+		i++;
+	}
+	switch (i)
+	{
+	case 0:
+		(this->*func[0])();
+		break;
+	case 1:
+		for (int j=0; j < 2; j++)
+			(this->*func[j])();
+		break;
+	case 2:
+		for (int j=0; j < 3; j++)
+			(this->*func[j])();
+		break;
+	case 3:
+		for (int j=0; j < 4; j++)
+			(this->*func[j])();
+		break;
+	default:
+		std::cout << "Level error" <<std::endl;
 	}
 }

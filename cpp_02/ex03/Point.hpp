@@ -6,7 +6,7 @@
 /*   By: njegat <njegat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 16:05:32 by njegat            #+#    #+#             */
-/*   Updated: 2023/06/16 17:41:05 by njegat           ###   ########.fr       */
+/*   Updated: 2023/07/31 05:31:08 by njegat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,17 @@
 
 class Point
 {
-public:
-	Point(void);
-	Point(const float nbx, const float nby);
-	Point(const Point &cpy);
-	Point & operator = (const Point &pt);
-	// void	setPointX(Fixed nbx);
-	// void	setPointY(Fixed nby);
-	Fixed	getPointX();
-	Fixed	getPointY();
-	~Point();
-private:
-	const Fixed	x;
-	const Fixed	y;
+	public:
+		Point(void);
+		Point(const float nbx, const float nby);
+		Point(const Point &cpy);
+		Fixed	getPointX();
+		Fixed	getPointY();
+		~Point();
+	private:
+		Point & operator = (const Point &pt);
+		const Fixed	x;
+		const Fixed	y;
 };
 
 #endif

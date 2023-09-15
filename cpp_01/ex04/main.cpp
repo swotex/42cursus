@@ -6,7 +6,7 @@
 /*   By: njegat <njegat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 06:22:30 by njegat            #+#    #+#             */
-/*   Updated: 2023/06/06 07:21:40 by njegat           ###   ########.fr       */
+/*   Updated: 2023/07/22 17:14:22 by njegat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,16 @@ static int	replace(char **argv)
 
 	if (ifile.is_open())
 	{
-		std::ofstream	ofile(std::string(argv[1]) + ".replace");
+		std::string tmp(argv[1]);
+		tmp.append(".replace");
+		std::ofstream	ofile(tmp.c_str());
 		if (ofile.is_open())
 		{
 			while (std::getline(ifile, line))
 			{
 				if (line.find(argv[2]) != std::string::npos)
 				{
-					for (int i=0; line[i]; i++)
+					for (unsigned int i=0; line[i]; i++)
 					{
 						if (i == line.find(argv[2], i) && \
 							line.find(argv[2], i) != std::string::npos)
@@ -59,6 +61,11 @@ static int	replace(char **argv)
 int main(int argc, char **argv)
 {
 	if (argc != 4)
+	{
+		std::cout << "error" << std::endl;
+		return (1);
+	}
+	if (argv[2][0] == 0 || argv[3][0] == 0)
 	{
 		std::cout << "error" << std::endl;
 		return (1);

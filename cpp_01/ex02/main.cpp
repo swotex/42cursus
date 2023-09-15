@@ -6,13 +6,13 @@
 /*   By: njegat <njegat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 05:17:28 by njegat            #+#    #+#             */
-/*   Updated: 2023/06/06 05:31:14 by njegat           ###   ########.fr       */
+/*   Updated: 2023/07/20 00:41:06 by njegat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
 
-int main(int argc, char const *argv[])
+int main(void)
 {
 	std::string	string;
 	std::string	*stringPTR;
