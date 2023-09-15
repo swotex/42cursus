@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: njegat <njegat@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tdhaussy <tdhaussy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 12:45:19 by tdhaussy          #+#    #+#             */
-/*   Updated: 2023/06/08 06:43:44 by njegat           ###   ########.fr       */
+/*   Updated: 2023/07/26 01:51:26 by tdhaussy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,5 +100,6 @@ void	del_single_char(char *str, int index);
 char	*ft_strjoin_free_first(char *s1, char *s2);
 int		consecutive_char(char c, char *str);
 void	ft_free_tab(char **tab);
+char	*ft_dtoa(double d, int digits);
 
 #endif

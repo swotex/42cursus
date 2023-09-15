@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: njegat <njegat@student.42.fr>              +#+  +:+       +#+         #
+#    By: tdhaussy <tdhaussy@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/27 14:30:49 by tdhaussy          #+#    #+#              #
-#    Updated: 2023/06/08 06:52:57 by njegat           ###   ########.fr        #
+#    Updated: 2023/07/26 01:51:45 by tdhaussy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,7 +67,8 @@ SRC =	ft_isalpha.c \
 		del_char.c \
 		ft_strjoin_free_first.c \
 		char_count.c \
-		ft_free_tab.c
+		ft_free_tab.c \
+		ft_dtoa.c
 
 OBJ=$(SRC:.c=.o)
 

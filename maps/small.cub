@@ -1,0 +1,14 @@
+NO ./textures/mister-mv.png
+SO ./textures/pixel_war.png
+WE ./textures/philippe.png
+EA ./textures/harold.png
+
+
+F 29,6,50
+C 255,180,92
+
+11111
+10001
+10N01
+10001
+11111
