@@ -6,7 +6,7 @@
 #    By: njegat <njegat@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/11 10:20:47 by njegat            #+#    #+#              #
-#    Updated: 2023/08/30 18:31:08 by njegat           ###   ########.fr        #
+#    Updated: 2023/09/24 03:10:51 by njegat           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = RPN
 
 CXX = c++
 
-CXXFLAGS = -Werror -Wextra -Wall -std=c++98
+CXXFLAGS = -Werror -Wextra -Wall -std=c++98 -g
 
 SRC =	main.cpp \
 		RPN.cpp

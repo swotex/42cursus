@@ -6,7 +6,7 @@
 /*   By: njegat <njegat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/27 15:38:14 by njegat            #+#    #+#             */
-/*   Updated: 2023/08/30 18:07:53 by njegat           ###   ########.fr       */
+/*   Updated: 2023/09/24 03:00:23 by njegat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,14 @@ static bool is_validDay(int year, int month, int day)
 
 	if (year % 4 == 0 && month == 2)
 	{
-		if (day > 29)
+		if (year % 100 == 0 && year % 400 != 0)
+		{
+			if (day > days[month - 1])
+				return (false);
+			else
+				return (true);
+		}
+		else if (day > 29)
 			return (false);
 		else
 			return (true);

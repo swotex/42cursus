@@ -6,7 +6,7 @@
 /*   By: njegat <njegat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 04:14:29 by njegat            #+#    #+#             */
-/*   Updated: 2023/09/15 17:17:03 by njegat           ###   ########.fr       */
+/*   Updated: 2023/09/29 02:04:05 by njegat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,20 @@
 #include <algorithm>
 #include <ctime>
 
-PmergeMe::PmergeMe(std::string line)
+PmergeMe::PmergeMe()
 {
 	_timeVec = 0;
 	_timeDec = 0;
-	_sorted = false;
-	fillArrays(line);
 }
 
 PmergeMe::PmergeMe(const PmergeMe &cpy)
 {
 	_vec.operator=(cpy._vec);
 	_deq.operator=(cpy._deq);
+	_vecRes.operator=(cpy._vecRes);
+	_deqRes.operator=(cpy._deqRes);
 	_timeVec = cpy._timeVec;
 	_timeDec = cpy._timeDec;
-	_sorted = cpy._sorted;
 }
 
 PmergeMe &PmergeMe::operator=(const PmergeMe &src)
@@ -40,188 +39,422 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &src)
 		return (*this);
 	_vec.operator=(src._vec);
 	_deq.operator=(src._deq);
+	_vecRes.operator=(src._vecRes);
+	_deqRes.operator=(src._deqRes);
 	_timeVec = src._timeVec;
 	_timeDec = src._timeDec;
-	_sorted = src._sorted;
 	return (*this);
 }
 
 PmergeMe::~PmergeMe(){}
 
-static bool checkNumber(std::string nb)
-{
-	for (int i=0; nb[i]; i++)
-	{
-		if (std::isdigit((int)nb[i]) == false)
-			return (false);
-	}
-	return (true);
-}
+// *************************************************************************************
+// ****************************** fordjonhson vector sort ******************************
+// *************************************************************************************
 
-void PmergeMe::fillArrays(std::string line)
-{
-	size_t pos = 0;
-	std::string stmp;
-	unsigned int tmp;
-
-	while (line.find(' ', pos) != std::string::npos)
-	{
-		stmp = line.substr(pos, (line.find(' ', pos) - pos));
-		if (checkNumber(stmp) == false)
-			throw BadEntryException();
-		if (!(std::istringstream(stmp) >> tmp))
-			throw BadEntryException();
-		_vec.push_back(tmp);
-		_deq.push_back(tmp);
-		pos = line.find(' ', pos);
-		while (line[pos] == ' ')
-			pos++;
-	}
-	if (pos != std::string::npos)
-	{
-		if (!(std::istringstream(line.substr(pos)) >> tmp))
-			throw BadEntryException();
-		_vec.push_back(tmp);
-		_deq.push_back(tmp);
-	}
-}
-
-int binarySearch(std::vector<unsigned int> _vecRes, int low, int high, unsigned int key)
+int binarySearch(std::vector<unsigned int> array, int low, int high, unsigned int key)
 {
 	while (low <= high)
 	{
 		int mid = low + (high - low) / 2;
-		if (_vecRes[mid] == key)
+		if (array[mid] == key)
 			return mid;
-		else if (_vecRes[mid] < key)
+		else if (array[mid] < key)
 			low = mid + 1;
 		else
 			high = mid - 1;
 	}
-	return -1;
+	return low;
 }
 
-int searchInsertPos(std::vector<unsigned int> _vecRes, int low, int high, unsigned int key)
+
+std::vector<unsigned int> recursiveSort(std::vector<unsigned int> maxPair)
+{
+	if (maxPair.size() == 1)
+		return maxPair;
+
+	int mid = maxPair.size() / 2;
+	std::vector<unsigned int> left(maxPair.begin(), maxPair.begin() + mid);
+	std::vector<unsigned int> right(maxPair.begin() + mid, maxPair.end());
+
+	left = recursiveSort(left);
+	right = recursiveSort(right);
+
+	std::vector<unsigned int> result;
+	size_t i = 0, j = 0;
+	while (i < left.size() && j < right.size())
+	{
+		if (left[i] < right[j]) {
+			result.push_back(left[i]);
+			i++;
+		} else {
+			result.push_back(right[j]);
+			j++;
+		}
+	}
+
+	while (i < left.size())
+	{
+		result.push_back(left[i]);
+		i++;
+	}
+	while (j < right.size())
+	{
+		result.push_back(right[j]);
+		j++;
+	}
+	return result;
+}
+
+std::vector<std::pair<unsigned int, unsigned int> > swapPair(std::vector<std::pair<unsigned int, unsigned int> > paired, size_t start, size_t len)
+{
+	int i = 0, tmp = 0;
+	std::vector<std::pair<unsigned int, unsigned int> > out;
+
+	while (i < (int)start && i < (int)paired.size())
+	{
+		out.push_back(paired[i]);
+		i++;
+	}
+	tmp = i + len - 1;
+	while (tmp >= (int)paired.size())
+		tmp--;
+	while (tmp >= i)
+	{
+		out.push_back(paired[tmp]);
+		tmp--;
+	}
+	i = i + len;
+	while (i < (int)paired.size())
+	{
+		out.push_back(paired[i]);
+		i++;
+	}
+	return (out);
+}
+
+std::vector<unsigned int> fordJohnsonVector(std::vector<unsigned int> &array)
+{
+	std::vector<std::pair<unsigned int, unsigned int> > paired;
+	std::vector<unsigned int> maxPair;
+	size_t i = 0;
+
+	// Make pair and add max in array
+	while (i + 1 < array.size())
+	{
+		int max = std::max(array[i], array[i + 1]);
+		int min = std::min(array[i], array[i + 1]);
+		paired.push_back(std::make_pair(min, max));
+		maxPair.push_back(max);
+		i += 2;
+	}
+
+	// sort max and add the min of first max
+	std::vector<unsigned int> tmp = recursiveSort(maxPair);
+	for (size_t i = 0; i < paired.size(); i++)
+	{
+		if (paired[i].second == tmp[0])
+		{
+			tmp.insert(tmp.begin(), paired[i].first);
+			paired.erase(paired.begin() + i);
+			break;
+		}
+	}
+
+	// swap min on suit 2, 2, 6...
+	size_t nb0 = 2, nb1 = 2;
+	i = 0;
+	while (i < paired.size())
+	{
+		paired = swapPair(paired, i, nb0);
+		i += nb0;
+		if (i < paired.size())
+		{
+			paired = swapPair(paired, i, nb1);
+			i+=nb1;
+		}
+		nb0 = nb0 * 2 + nb1;
+		nb1 = nb1 * 2 + nb0;
+	}
+	
+	// add min
+	for (size_t i = 0; i < paired.size(); i++)
+	{
+		int pos = binarySearch(tmp, 0, tmp.size(), paired[i].second);
+		pos = binarySearch(tmp, 0, pos, paired[i].first);
+		tmp.insert(tmp.begin() + pos, paired[i].first);
+	}
+	// add odd
+	if (array.size() % 2 == 1)
+	{
+		int pos = binarySearch(tmp, 0, tmp.size()-1, *(array.end() - 1));
+		std::cerr << "pos: " << pos << std::endl;
+		tmp.insert(tmp.begin() + pos, *(array.end() - 1));
+	}
+	return (tmp);
+}
+
+int fillVector(std::vector<unsigned int> &vec, std::string line)
+{
+	std::string tmp;
+	unsigned int tmpNumber;
+
+	if (line.empty() == true)
+		return (1);
+	for (size_t i = 0; i < line.size();)
+	{
+		tmp.clear();
+		while (line[i] == ' ')
+			i++;
+		if (line[i] == 0)
+			break;
+		for (size_t j = 0; std::isdigit(line[i]) != 0; j++)
+		{
+			tmp.insert(tmp.begin() + j, line[i]);
+			i++;
+		}
+		if (std::isdigit(line[i]) == 0 && line[i] != ' ' && line[i] != 0)
+			return (1);
+		if (!(std::istringstream(tmp) >> tmpNumber))
+			return (1);
+		vec.push_back(tmpNumber);
+	}
+	return (0);
+}
+
+int PmergeMe::sortVector(std::string line)
+{
+	clock_t start_time, end_time;
+
+	start_time = clock();
+	
+	if (fillVector(_vec, line) != 0)
+	{
+		std::cout << "Error : Bad entry" << std::endl;
+		return (1);
+	}
+	if (_vec.size() < 2)
+	{
+		std::cout << "Error : Invalid argument" << std::endl;
+		return (1);
+	}
+
+	_vecRes = fordJohnsonVector(_vec);
+	end_time = clock();
+	_timeVec = (double)(end_time - start_time) / CLOCKS_PER_SEC * 1000000;
+	return (0);
+}
+
+// *************************************************************************************
+// ****************************** fordjonhson deque sort ******************************
+// *************************************************************************************
+
+
+int binarySearch(std::deque<unsigned int> array, int low, int high, unsigned int key)
 {
 	while (low <= high)
 	{
 		int mid = low + (high - low) / 2;
-		if (_vecRes[mid] == key)
+		if (array[mid] == key)
 			return mid;
-		else if (_vecRes[mid] < key)
+		else if (array[mid] < key)
 			low = mid + 1;
 		else
-			return mid - 1;
+			high = mid - 1;
 	}
-	return -1;
+	return low;
 }
 
-void insertionSort(std::vector<unsigned int> &_vecRes, std::pair<unsigned int, unsigned int> pair)
+std::deque<std::pair<unsigned int, unsigned int> > swapPair(std::deque<std::pair<unsigned int, unsigned int> > paired, size_t start, size_t len)
 {
-	int max = _vecRes.size() - 1;
-	int insertPos;
+	int i = 0, tmp = 0;
+	std::deque<std::pair<unsigned int, unsigned int> > out;
 
-    max = binarySearch(_vecRes, 0, max, pair.second);
-	if (max == -1)
+	while (i < (int)start && i < (int)paired.size())
 	{
-		std::cerr << "Error : not found" << std::endl;
-		return ;
+		out.push_back(paired[i]);
+		i++;
 	}
-	insertPos = searchInsertPos(_vecRes, 0, max, pair.first);
-	std::cerr << "add (insert sort) -> " << pair.first << std::endl;
-	_vecRes.insert(_vecRes.begin() + insertPos, pair.first);
+	tmp = i + len - 1;
+	while (tmp >= (int)paired.size())
+		tmp--;
+	while (tmp >= i)
+	{
+		out.push_back(paired[tmp]);
+		tmp--;
+	}
+	i = i + len;
+	while (i < (int)paired.size())
+	{
+		out.push_back(paired[i]);
+		i++;
+	}
+	return (out);
 }
 
-void PmergeMe::addInRes(std::vector<std::pair<unsigned int, unsigned int> > paired)
+std::deque<unsigned int> recursiveSort(std::deque<unsigned int> maxPair)
 {
-	if (_vecRes.empty() == true)
-		_vecRes.push_back(paired[0].second);
-	std::vector<std::pair<unsigned int, unsigned int> >::iterator it = paired.begin();
-	while (it != paired.end())
+	if (maxPair.size() == 1)
+		return maxPair;
+
+	int mid = maxPair.size() / 2;
+	std::deque<unsigned int> left(maxPair.begin(), maxPair.begin() + mid);
+	std::deque<unsigned int> right(maxPair.begin() + mid, maxPair.end());
+
+	left = recursiveSort(left);
+	right = recursiveSort(right);
+
+	std::deque<unsigned int> result;
+	size_t i = 0, j = 0;
+	while (i < left.size() && j < right.size())
 	{
-		if (it->second == _vecRes[0])
-		{
-			_vecRes.insert(_vecRes.begin(), it->first);
-			std::cerr << "add (addInRes) -> " << it->first << std::endl;
-			paired.erase(it);
-			break;
+		if (left[i] < right[j]) {
+			result.push_back(left[i]);
+			i++;
+		} else {
+			result.push_back(right[j]);
+			j++;
 		}
-		it++;
 	}
-	for (int i = 0; i < (int)paired.size(); i++)
+
+	while (i < left.size())
 	{
-		insertionSort(_vecRes, paired[i]);
+		result.push_back(left[i]);
+		i++;
 	}
-	
+	while (j < right.size())
+	{
+		result.push_back(right[j]);
+		j++;
+	}
+	return result;
 }
 
-void PmergeMe::recursivelySortVector(std::vector<std::pair<unsigned int, unsigned int> > paired)
+std::deque<unsigned int> fordJohnsonDeque(std::deque<unsigned int> &array)
 {
-	if (paired.size() < 2)
-		return ;
-	std::vector<std::pair<unsigned int, unsigned int> > new_paired;
-	int i = 0;
-	while (i < (int)paired.size() && i + 1 < (int)paired.size())
+	std::deque<std::pair<unsigned int, unsigned int> > paired;
+	std::deque<unsigned int> maxPair;
+	size_t i = 0;
+
+	// Make pair and add max in array
+	while (i + 1 < array.size())
 	{
-		new_paired.push_back(std::make_pair(std::min(paired[i].second, paired[i + 1].second), std::max(paired[i].second, paired[i + 1].second)));
+		int max = std::max(array[i], array[i + 1]);
+		int min = std::min(array[i], array[i + 1]);
+		paired.push_back(std::make_pair(min, max));
+		maxPair.push_back(max);
 		i += 2;
 	}
-	recursivelySortVector(new_paired);
-	addInRes(new_paired);
-	// if odd -> add lastone
-	if (paired.size() % 2 == 1)
-	{
-		insertionSort(_vecRes, *paired.end());
-	}
-}
 
-std::vector<unsigned int> PmergeMe::fordJohnsonVector(std::vector<unsigned int> &array)
-{
-	std::vector<unsigned int>::iterator it = array.begin();
-	std::vector<std::pair<unsigned int, unsigned int> > paired;
-
-	while (it != array.end() && it + 1 != array.end())
+	// sort max and add the min of first max
+	std::deque<unsigned int> tmp = recursiveSort(maxPair);
+	for (size_t i = 0; i < paired.size(); i++)
 	{
-		paired.push_back(std::make_pair(std::min(*it, *(it + 1)), std::max(*it, *(it + 1))));
-		it += 2;
+		if (paired[i].second == tmp[0])
+		{
+			tmp.insert(tmp.begin(), paired[i].first);
+			paired.erase(paired.begin() + i);
+			break;
+		}
 	}
-	recursivelySortVector(paired);
-	addInRes(paired);
-	// if size == odd -> add lastone
+
+	// swap min on suit 2, 2, 6...
+	size_t nb0 = 2, nb1 = 2;
+	i = 0;
+	while (i < paired.size())
+	{
+		paired = swapPair(paired, i, nb0);
+		i += nb0;
+		if (i < paired.size())
+		{
+			paired = swapPair(paired, i, nb1);
+			i+=nb1;
+		}
+		nb0 = nb0 * 2 + nb1;
+		nb1 = nb1 * 2 + nb0;
+	}
+	
+	// add min
+	for (size_t i = 0; i < paired.size(); i++)
+	{
+		int pos = binarySearch(tmp, 0, tmp.size(), paired[i].second);
+		pos = binarySearch(tmp, 0, pos, paired[i].first);
+		tmp.insert(tmp.begin() + pos, paired[i].first);
+	}
+	// add odd
 	if (array.size() % 2 == 1)
 	{
-		int pos = searchInsertPos(_vecRes, 0, _vecRes.size(), array[array.size() - 1]);
-		_vecRes.insert(_vecRes.begin() + pos, array[array.size() - 1]);
+		int pos = binarySearch(tmp, 0, tmp.size() - 1, *(array.end() - 1));
+		std::cerr << "pos: " << pos << std::endl;
+		tmp.insert(tmp.begin() + pos, *(array.end() - 1));
 	}
-	return (array);
+	return (tmp);
 }
 
-void PmergeMe::sort()
+int fillDeque(std::deque<unsigned int> &deq, std::string line)
+{
+	std::string tmp;
+	unsigned int tmpNumber;
+
+	if (line.empty() == true)
+		return (1);
+	for (size_t i = 0; i < line.size();)
+	{
+		tmp.clear();
+		while (line[i] == ' ')
+			i++;
+		if (line[i] == 0)
+			break;
+		for (size_t j = 0; std::isdigit(line[i]) != 0; j++)
+		{
+			tmp.insert(tmp.begin() + j, line[i]);
+			i++;
+		}
+		if (std::isdigit(line[i]) == 0 && line[i] != ' ' && line[i] != 0)
+			return (1);
+		if (!(std::istringstream(tmp) >> tmpNumber))
+			return (1);
+		deq.push_back(tmpNumber);
+	}
+	return (0);
+}
+
+int PmergeMe::sortDeque(std::string line)
 {
 	clock_t start_time, end_time;
+
 	start_time = clock();
-	_vec = fordJohnsonVector(_vec);
+	
+	if (fillDeque(_deq, line) != 0)
+	{
+		std::cout << "Error : Bad entry" << std::endl;
+		return (1);
+	}
+	if (_deq.size() < 2)
+	{
+		std::cout << "Error : Invalid argument" << std::endl;
+		return (1);
+	}
+
+	_deqRes = fordJohnsonDeque(_deq);
 	end_time = clock();
-	_timeVec = (double)(end_time - start_time) / CLOCKS_PER_SEC * 1000000;
-	// start_time = clock();
-	// _deq = fordJohnsonDeque(_deq);
-	// end_time = clock();
-	// _timeDec = (double)(end_time - start_time) / CLOCKS_PER_SEC * 1000000;
-	_sorted = true;
+	_timeDec = (double)(end_time - start_time) / CLOCKS_PER_SEC * 1000000;
+	return (0);
 }
 
 std::vector<unsigned int> PmergeMe::getSortedVector()
 {
-	if (_sorted == false)
-		sort();
 	return (_vecRes);
 }
 
 std::deque<unsigned int> PmergeMe::getSortedDeque()
 {
-	if (_sorted == false)
-		sort();
-	return (_deq);
+	return (_deqRes);
+}
+
+std::vector<unsigned int> PmergeMe::getNotSortedVector()
+{
+	return (_vec);
 }
 
 double PmergeMe::getTimeVector() const
@@ -232,9 +465,4 @@ double PmergeMe::getTimeVector() const
 double PmergeMe::getTimeDeque() const
 {
 	return (_timeDec);
-}
-
-const char *PmergeMe::BadEntryException::what() const throw()
-{
-	return ("Error : Bad entry");
 }

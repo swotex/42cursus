@@ -6,7 +6,7 @@
 /*   By: njegat <njegat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/30 18:28:58 by njegat            #+#    #+#             */
-/*   Updated: 2023/09/09 06:53:29 by njegat           ###   ########.fr       */
+/*   Updated: 2023/09/24 03:11:31 by njegat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,11 @@ void RPN::resolve()
 	std::stack<int> st;
 	int tmp;
 
+	if (_line.empty())
+	{
+		std::cout << "Error : Invalid entry" << std::endl;
+		return ;
+	}
 	for (int i = 0; _line[i]; i++)
 	{
 		if (_line[i] == ' ')
@@ -105,7 +110,7 @@ void RPN::resolve()
 			}
 		}
 	}
-	if (st.size() > 1)
+	if (st.size() > 1 || st.size() == 0)
 		std::cout << "Error : Invalid entry" << std::endl;
 	else
 		std::cout << st.top() << std::endl;
