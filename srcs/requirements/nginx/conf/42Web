@@ -1,0 +1,24 @@
+server {
+	listen 443 ssl;
+	listen [::]:443 ssl;
+
+    server_name njegat.42.fr;
+
+	root /var/njegatwp;
+	index index.html index.php;
+
+	location / {
+        try_files $uri $uri/ =404;
+    }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass wordpress:9000;
+  }
+
+    # ssl on;
+    ssl_prefer_server_ciphers   on;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_certificate      /etc/ssl/certs/njegat-selfsigned.crt;
+    ssl_certificate_key  /etc/ssl/private/njegat-selfsigned.key;
+}

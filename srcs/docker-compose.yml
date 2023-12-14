@@ -1,0 +1,133 @@
+version: '3'
+
+services:
+    nginx:
+        build:
+            context: ./requirements/nginx
+        container_name: nginx
+        image: nginx
+        restart: always
+        ports:
+            - "443:443"
+        depends_on:
+            - wordpress
+        volumes:
+            - wordpress:/var/njegatwp
+        networks:
+            - mynetwork
+
+    mariadb:
+        build:
+            context: ./requirements/mariadb
+            args:
+                MYSQL_USER: ${MYSQL_USER}
+                MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+                DB_NAME: ${DB_NAME}
+        container_name: mariadb
+        image: mariadb
+        restart: always
+        env_file:
+            - .env
+        volumes:
+            - mariadb:/var/lib/mysql
+        networks:
+            - mynetwork
+
+    wordpress:
+        build:
+            context: ./requirements/wordpress
+        container_name: wordpress
+        image: wordpress
+        restart: always
+        env_file:
+            - .env
+        depends_on:
+            - mariadb
+        volumes:
+            - wordpress:/var/njegatwp
+        networks:
+            - mynetwork
+
+    adminer:
+        build:
+            context: ./requirements/adminer
+        container_name: adminer
+        image: adminer
+        restart: always
+        ports:
+            - "8000:8000"
+        env_file:
+            - .env
+        depends_on:
+            - mariadb
+        networks:
+            - mynetwork
+
+    redis:
+        build:
+            context: ./requirements/redis
+        container_name: redis
+        image: redis
+        restart: always
+        env_file:
+            - .env
+        networks:
+            - mynetwork
+
+    portainer:
+        build:
+            context: ./requirements/portainer
+        container_name: portainer
+        image: portainer
+        restart: always
+        ports:
+            - "9000:9000"
+        volumes:
+            - portainer_data:/data
+            - /var/run/docker.sock:/var/run/docker.sock
+        networks:
+            - mynetwork
+
+    ftp:
+        build:
+            context: ./requirements/ftp
+            args:
+                FTP_USER: ${FTP_USER}
+                FTP_PASS: ${FTP_PASS}
+        container_name: ftp
+        image: ftp
+        restart: always
+        ports:
+            - "21:21"
+        depends_on:
+            - wordpress
+        volumes:
+            - wordpress:/var/njegatwp
+        env_file:
+            - .env
+        networks:
+            - mynetwork
+
+volumes:
+    portainer_data:
+        name: portainer_data
+    mariadb:
+        driver: local
+        name: mariadb
+        driver_opts:
+            o: bind
+            device: /home/njegat/data/maria
+            type: none
+    wordpress:
+        driver: local
+        name: wordpress
+        driver_opts:
+            o: bind
+            device: /home/njegat/data/wp
+            type: none
+
+networks:
+    mynetwork:
+        driver: bridge
+        name: mynetwork
+
