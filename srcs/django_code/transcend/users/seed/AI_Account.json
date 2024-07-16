@@ -1,0 +1,9 @@
+[
+    {
+        "model": "users.user",
+        "pk": 1,
+        "fields": {
+          "username": "AI"
+        }
+    }
+]

@@ -1,0 +1,88 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    volumes:
+      - db:/var/lib/postgresql/data
+    expose:
+      - '5432'
+    networks:
+      - transcendNetwork
+    env_file:
+      - ./srcs/.env
+
+  daphne:
+    build:
+      context: ./srcs/requirements/Daphne
+    container_name: daphne
+    image: daphne
+    restart: always
+    volumes:
+      - app:/app
+    expose:
+      - "8001"
+    networks:
+      - transcendNetwork
+    depends_on:
+      - postgres
+    env_file:
+      - ./srcs/.env
+
+  nginx:
+    build:
+      context: ./srcs/requirements/Nginx
+    container_name: nginx
+    image: nginx
+    restart: always
+    ports:
+      - "44433:44433"
+    volumes:
+      - app:/app
+    networks:
+      - transcendNetwork
+    depends_on:
+      - postgres
+
+  pong:
+    build:
+      context: ./srcs/requirements/Pong-Server
+    container_name: pong
+    image: pong
+    restart: always
+    ports:
+      - "8765-8790:8765-8790"
+    networks:
+      - transcendNetwork
+    volumes:
+      - app:/app
+    env_file:
+      - ./srcs/.env
+
+  adminer:
+    image: adminer:latest
+    container_name: adminer
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - transcendNetwork
+    depends_on:
+      - postgres
+
+
+volumes:
+  app:
+    driver: local
+    name: app
+    driver_opts:
+      o: bind
+      type: none
+      device: ./srcs/django_code
+  db:
+    name: db
+
+networks:
+  transcendNetwork:
+    driver: bridge
+    name: transcendNetwork
