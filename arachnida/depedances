@@ -1,4 +1,7 @@
 pip install beautifulsoup4
 pip install pillow
 
+
+pip install customtkinter
+
 ne prend pas les images css (html only)

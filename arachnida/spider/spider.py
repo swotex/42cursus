@@ -58,8 +58,6 @@ def getContentUrl(url):
 
 		if response.status_code == 200:
 			page_content = response.text
-			# with open("site.html", 'wb') as file:
-				# file.write(response.text)
 			return(page_content)
 		else:
 			printErrors(MEDIUM, f"Failed to retrieve the page. Status code: {response.status_code} (skipped)")

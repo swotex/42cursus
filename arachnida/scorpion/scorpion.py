@@ -4,6 +4,8 @@ import sys
 from urllib.parse import urlparse
 from PIL import Image
 from PIL.ExifTags import TAGS
+from image import ImageInfo
+from graphics import *
 
 
 def printHeader():
@@ -50,7 +52,11 @@ def getAllfiles(inFiles, path):
 	for file in inFiles:
 		extension = os.path.splitext(urlparse(file).path)[1]
 		if (extension.lower() in autorizedExt):
-			allFiles.append(file)
+			try:
+				allFiles.append(ImageInfo(file))
+			except Exception as e:
+				printErrors(HIGH, f"Error processing file {file}: {e}")
+
 	if (path is None):
 		return
 	if (not os.path.isdir(path)):
@@ -62,7 +68,10 @@ def getAllfiles(inFiles, path):
 		if os.path.isfile(full_path):
 			extension = os.path.splitext(urlparse(full_path).path)[1]
 			if (extension.lower() in autorizedExt):
-				allFiles.append(full_path)
+				try:
+					allFiles.append(ImageInfo(full_path))
+				except Exception as e:
+					printErrors(HIGH, f"Error processing file {file}: {e}")
 			
 
 def main():
@@ -93,18 +102,31 @@ def main():
 	getAllfiles(args.FILES, args.f)
 	for file in allFiles:
 		try:
-			image = Image.open(file)
-			exif_data = image._getexif()
-			if exif_data:
-				exif = {
-					TAGS.get(tag, tag): value
-					for tag, value in exif_data.items()
-				}
-				print(f"EXIF data for {file}: {exif}")
-			else:
-				print(f"No EXIF data for {file}.")
+			# image = Image.open(file)
+			# exif_data = image._getexif()
+			# if exif_data:
+			# 	exif = {
+			# 		TAGS.get(tag, tag): value
+			# 		for tag, value in exif_data.items()
+			# 	}
+			# 	print(f"EXIF data for {file}: {exif}")
+			# else:
+			# 	print(f"No EXIF data for {file}.")
+			# image = ImageInfo(file)
+			file.printAll() # tout n'y est pas ?
+			# print(f"File: {file}")
+			# print(f"  Size: {image.getFileSize()} bytes")
+			# print(f"  Dimensions: {image.getImageSize()}")
+			# print(f"  Format: {image.getFormat()}")
+			# print(f"  MIME type: {image.getMimeType()}")
+			# print(f"  Creation time: {image.getCreateTime()}")
+			# print(f"  Modification time: {image.getModifyTime()}")
+			# print(f"  EXIF data: {image.getExif()}")
+
 		except Exception as e:
 			printErrors(HIGH, f"Error processing file {file}: {e}")
+
+	createWindow(allFiles)
 
 if __name__ == '__main__':
 	main()
