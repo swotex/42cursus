@@ -1,12 +1,32 @@
 import tkinter
 import customtkinter
+from PIL import ImageTk, Image
 
 def clear_frame(frame):
-    for widget in frame.winfo_children():
-        widget.destroy()
+	for widget in frame.winfo_children():
+		widget.destroy()
 
 def __printImageInfo(image, mainFrame):
-	print(image.name)
+	clear_frame(mainFrame)
+
+	my_image = customtkinter.CTkImage(light_image=Image.open(image.imgLink),
+                                  dark_image=Image.open(image.imgLink),
+                                  size=(150, 150))
+
+	label = customtkinter.CTkLabel(mainFrame, image=my_image, text="")
+	label.place(x=10, y=10)
+
+	labelName = customtkinter.CTkLabel(mainFrame, text="Name :", font=("Arial", 16))
+	labelName.place(x=180, y=20)
+	entryName = customtkinter.CTkEntry(mainFrame, placeholder_text=image.name, width=300, state="disabled")
+	entryName.place(x=240, y=20)
+
+	labelSize = customtkinter.CTkLabel(mainFrame, text="Size :", font=("Arial", 16))
+	labelSize.place(x=180, y=65)
+	entrySize = customtkinter.CTkEntry(mainFrame, placeholder_text=image.getFileSize(), width=80)
+	entrySize.place(x=240, y=65)
+	labelSize2 = customtkinter.CTkLabel(mainFrame, text="bytes", font=("Arial", 16))
+	labelSize2.place(x=330, y=65)
 
 def createWindow(allFiles):
 	width = 850
