@@ -102,26 +102,8 @@ def main():
 	getAllfiles(args.FILES, args.f)
 	for file in allFiles:
 		try:
-			# image = Image.open(file)
-			# exif_data = image._getexif()
-			# if exif_data:
-			# 	exif = {
-			# 		TAGS.get(tag, tag): value
-			# 		for tag, value in exif_data.items()
-			# 	}
-			# 	print(f"EXIF data for {file}: {exif}")
-			# else:
-			# 	print(f"No EXIF data for {file}.")
-			# image = ImageInfo(file)
-			file.printAll() # tout n'y est pas ?
-			# print(f"File: {file}")
-			# print(f"  Size: {image.getFileSize()} bytes")
-			# print(f"  Dimensions: {image.getImageSize()}")
-			# print(f"  Format: {image.getFormat()}")
-			# print(f"  MIME type: {image.getMimeType()}")
-			# print(f"  Creation time: {image.getCreateTime()}")
-			# print(f"  Modification time: {image.getModifyTime()}")
-			# print(f"  EXIF data: {image.getExif()}")
+			pass
+			# file.printAll()
 
 		except Exception as e:
 			printErrors(HIGH, f"Error processing file {file}: {e}")

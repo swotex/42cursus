@@ -49,4 +49,7 @@ class ImageInfo:
 		print(f"  MIME type: {self.getMimeType()}")
 		print(f"  Creation time: {self.getCreateTime()}")
 		print(f"  Modification time: {self.getModifyTime()}")
-		print(f"  EXIF data: {self.getExif()}")
+		print(f"  EXIF data:")
+		for name, value in self.getExif().items():
+			print(f"    {name} : {value}")
+		print("\n")
