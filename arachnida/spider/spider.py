@@ -13,6 +13,7 @@ VERBOSE = False
 RECUR = False
 DEPTH = 5
 PATH = "./data/"
+QUIT = False
 
 user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
 headers = {'User-Agent': user_agent}
@@ -82,8 +83,6 @@ def downloadImage(urlImage, baseUrl):
 
 		if response.status_code == 200:
 			if (filename in downloadedImages):
-				# if (VERBOSE):
-					# printErrors(LOW, f"Image already downloaded : {filename}")
 				return
 			downloadedImages.append(filename)
 			with open(os.path.join(PATH, filename), 'wb') as file:
@@ -94,13 +93,15 @@ def downloadImage(urlImage, baseUrl):
 			printErrors(MEDIUM, f"Failed to get image. Status code: {response.status_code} (skipped)")
 			return
 	except:
-		printErrors(HIGH, f"Can't fetch image : {url}")
+		printErrors(HIGH, f"Can't fetch image : {urlImage}")
 		return
 
 def getCorrectLink(href, baseUrl):
 	if ("http" in href):
-		if (VERBOSE):
-			if (urlparse(href).netloc != urlparse(baseUrl).netloc):
+		if (urlparse(href).netloc != urlparse(baseUrl).netloc):
+			if (QUIT == False):
+				return (None)
+			if (VERBOSE):
 				printErrors(MEDIUM, "The Recursive quited the main domain")
 		return (href)
 	return (urljoin(baseUrl, href))
@@ -130,9 +131,7 @@ def getImages(url, DepthCount):
 		if (not href or "#" in href):
 			continue
 		completUrl = getCorrectLink(href, url)
-		if (completUrl in visitedPages):
-			# if (VERBOSE):
-				# printErrors(LOW, f"Page already visited : {href}")
+		if (completUrl == None or completUrl in visitedPages):
 			continue
 		visitedPages.append(completUrl)
 		getImages(completUrl, DepthCount - 1)
@@ -145,6 +144,7 @@ def main():
 	global RECUR
 	global DEPTH
 	global PATH
+	global QUIT
 
 	parser = argparse.ArgumentParser(description='Images extractor jpg/jpeg/png/gif/bmp')
 	
@@ -152,6 +152,7 @@ def main():
 	parser.add_argument('-l', metavar='[DEPTH]', type=int, default=5, help='Maximum depth level to the recursive download. Default 5')
 	parser.add_argument('-p', metavar='[PATH]', type=str, default='./data/', help='PATH where downloaded files will be saved. Default (./data/)')
 	parser.add_argument('-v', action='store_true', help='Enable verbose mode')
+	parser.add_argument('-q', action='store_true', help='Enable to allow exit from primary domain')
 	parser.add_argument('URL', type=str, help='URL to download images from')
 
 	args = parser.parse_args()
@@ -168,9 +169,13 @@ def main():
 		if (args.r):
 			RECUR = True
 	if args.v is not None:
-		print(f'Verbose :   {args.v} \n')
+		print(f'Verbose :   {args.v}')
 		if (args.v):
 			VERBOSE = True
+	if args.q is not None:
+		print(f'quit domain :   {args.q} \n')
+		if (args.q):
+			QUIT = True
 
 	if not os.path.exists(args.p):
 		try:
@@ -187,7 +192,7 @@ def main():
 
 	visitedPages.append(args.URL)
 	getImages(args.URL, DEPTH)
-	print(f"\033[1;32m\n[\u2713] Finished {len(downloadedImages)} images downloaded in {len(visitedPages)} pages\033[0m\n")
+	print(f"\033[1;32m\n[\u2713] Finished, {len(downloadedImages)} images downloaded in {len(visitedPages)} pages\033[0m\n")
 
 
 if __name__ == '__main__':
