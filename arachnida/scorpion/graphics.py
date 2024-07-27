@@ -78,20 +78,21 @@ def __printImageInfo(image, mainFrame):
 	row = 0
 	column = 0
 
-	for name, value in exif.items():
-		default_value = tkinter.StringVar(value=value)
-		customtkinter.CTkLabel(exif_frame, text=name, font=("Arial", 16)).grid(row=row, column=0, padx=10, sticky="w")
-		customtkinter.CTkEntry(exif_frame, textvariable=default_value).grid(row=row, column=1, padx=10, sticky="w")
-		# print(f"{name} : {value} -> {row} : {column}")
-		# if (column == 2):
-			# column = 0
-		row += 1
-		# else:
-			# column += 2
+	if (exif):
+		for name, value in exif.items():
+			default_value = tkinter.StringVar(value=value)
+			customtkinter.CTkLabel(exif_frame, text=name, font=("Arial", 16)).grid(row=row, column=0, padx=10, sticky="w")
+			customtkinter.CTkEntry(exif_frame, textvariable=default_value).grid(row=row, column=1, padx=10, sticky="w")
+			# print(f"{name} : {value} -> {row} : {column}")
+			# if (column == 2):
+				# column = 0
+			row += 1
+			# else:
+				# column += 2
+		print(piexif.load(image.image.info['exif']))
 	save = customtkinter.CTkButton(mainFrame, text="Save")
 	save.place(x=500, y=450)
 
-	print(piexif.load(image.image.info['exif']))
 
 def createWindow(allFiles):
 	width = 850
