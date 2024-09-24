@@ -1,6 +1,6 @@
-global _ft_strcmp
+global ft_strcmp
 
-_ft_strcmp:
+ft_strcmp:
     mov rcx, -1
     jmp loopcmp
 

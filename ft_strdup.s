@@ -1,19 +1,19 @@
-global _ft_strdup
+global ft_strdup
 extern malloc
-extern _ft_strlen
-extern _ft_strcpy
+extern ft_strlen
+extern ft_strcpy
 
-_ft_strdup:
+ft_strdup:
     ; rdi
     mov rsi, rdi
-    call _ft_strlen
+    call ft_strlen
     inc rax
     mov rdi, rax
     call malloc
     cmp rax, 0
     je error_malloc
     mov rdi, rax
-    call _ft_strcpy
+    call ft_strcpy
     ret
 
 error_malloc:

@@ -5,14 +5,15 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-// Déclaration de la fonction ASM
-extern char *_ft_strdup(const char *s);
+// Déclaration des fonctions ASM
+extern char *ft_strdup(const char *s);
 
-void main(void)
+int main(void)
 {
 	// char *test_str = malloc(4);
     char *test = NULL;
-    test = _ft_strdup("t");
+    test = ft_strdup("t");
     printf("the back is '%s'", test);
     free(test);
+    return (0);
 }

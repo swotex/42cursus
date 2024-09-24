@@ -19,17 +19,17 @@ SRC = ft_strlen.s \
 
 OBJ = $(SRC:%.s=%.o)
 
-%.o: %.c
+%.o: %.s
 	@$(NASM) $(ASMFLAGS) $< -o $@
 
-$(NAME): $(OBJ)
-	ar r $(NAME) $(OBJ)
+$(LIBNAME): $(OBJ)
+	@ar rcs $(LIBNAME) $(OBJ)
 	@echo "\033[4;32m--- Lib created ---\n\033[0m"
 
-all: $(NAME)
+all: $(LIBNAME)
 
 test: all
-	@$(GCC) $(GCCFLAGS) $(OBJ) test.c -o $(TESTNAME)
+	@$(GCC) $(GCCFLAGS) test.c $(LIBNAME) -o $(TESTNAME)
 	@echo "\033[4;32m--- Executable created ---\n\033[0m"
 
 clean:
@@ -37,7 +37,7 @@ clean:
 	@rm -rf $(BOBJ)
 
 fclean: clean
-	@rm -rf $(NAME)
+	@rm -rf $(TESTNAME) $(LIBNAME)
 	@echo "\033[4;35m--- all creations have been deleted ---\n\033[0m"
 
 re: fclean all
