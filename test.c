@@ -12,7 +12,9 @@ int main(void)
 {
 	// char *test_str = malloc(4);
     char *test = NULL;
-    test = ft_strdup("t");
+    test = ft_strdup("tt");
+    if (!test)
+        printf("error");
     printf("the back is '%s'", test);
     free(test);
     return (0);
