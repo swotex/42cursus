@@ -35,6 +35,12 @@ void printHeader(const char *str)
     printf("########################################\n\n");
 }
 
+void errorAlloc(void)
+{
+    printf("error malloc");
+    exit(1);
+}
+
 void strlen_test(void)
 {
     char *test = "Hey, its a msg !";
@@ -47,6 +53,8 @@ void strlen_test(void)
 void strcpy_test(void)
 {
     char *dest = malloc(8);
+    if (!dest)
+        errorAlloc();
     bzero(dest, 8);
 
     dest = strcpy(dest, "coucou!");
@@ -149,11 +157,15 @@ void strdup_test(void)
     char *duplicated;
 
     duplicated = strdup("Hey, this is my msg");
+    if (!duplicated)
+        errorAlloc();
     printf("try duplicate with strdup : %s\n", duplicated);
     free(duplicated);
     duplicated = NULL;
 
     duplicated = ft_strdup("Hey, this is my msg");
+    if (!duplicated)
+        errorAlloc();
     printf("try duplicate with ft_strdup : %s\n", duplicated);
     free(duplicated);
     duplicated = NULL;
