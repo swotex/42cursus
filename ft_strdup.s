@@ -8,11 +8,9 @@ ft_strdup:
     call ft_strlen
     inc rax
     mov rdi, rax
-
-
+    push rsi
     call malloc wrt ..plt
-
-
+    pop rsi
     cmp rax, 0
     je error_malloc
     mov rdi, rax
