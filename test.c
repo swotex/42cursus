@@ -5,6 +5,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <string.h>
+#include <errno.h>
 
 // Déclaration des fonctions ASM
 extern size_t ft_strlen(const char *s);
@@ -115,11 +116,13 @@ void write_test(void)
 
     printf("\nBad write on fd -1\n");
     back = write(-1, "this is a test\n", 15);
-    printf("back of write is : %d\n", back);
+    printf("back of write is : %d and errno : %d\n", back, errno);
+
+    errno = 0;
 
     printf("\nBad ft_write on fd -1\n");
     back = ft_write(-1, "this is a test\n", 15);
-    printf("back of ft_write is : %d\n", back);
+    printf("back of ft_write is : %d and errno : %d\n", back, errno);
 }
 
 void read_test(void)
@@ -147,9 +150,10 @@ void read_test(void)
     close(fd);
 
     back = read(-1, buff, 3);
-    printf("\nBad fd (-1) on read : %d", back);
+    printf("\nBad fd (-1) on read : %d, errno : %d\n", back, errno);
+    errno = 0;
     back = ft_read(-1, buff, 3);
-    printf("\nBad fd (-1) on ft_read : %d\n", back);
+    printf("Bad fd (-1) on ft_read : %d, errno : %d\n", back, errno);
 }
 
 void strdup_test(void)
