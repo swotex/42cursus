@@ -2,11 +2,11 @@ LIBNAME = libasm.a
 
 NASM = nasm
 
-ASMFLAGS = -f elf64
+ASMFLAGS = -f elf64 -g
 
 GCC = gcc
 
-GCCFLAGS = -Werror -Wextra -Wall
+GCCFLAGS = -Werror -Wextra -Wall -g
 
 TESTNAME = libasm_test
 

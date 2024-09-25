@@ -9,11 +9,9 @@ ft_strdup:
     inc rax
     mov rdi, rax
 
-    sub rsp, 8
 
     call malloc wrt ..plt
 
-    add rsp, 8
 
     cmp rax, 0
     je error_malloc
