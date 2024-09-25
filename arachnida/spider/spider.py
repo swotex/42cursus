@@ -71,7 +71,7 @@ def downloadImage(urlImage, baseUrl):
 	extension = os.path.splitext(urlparse(urlImage).path)[1]
 	if (extension.lower() not in wantedImgExt):
 		if (VERBOSE):
-			printErrors(LOW, f"Unsupported extension {extension}")
+			printErrors(LOW, f"Unsupported extension {extension} \n url : {urlImage}")
 		return
 	if (not urlImage):
 		return
