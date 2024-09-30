@@ -4,6 +4,8 @@ global is_num
 global find_char
 global str_max_len
 
+; ##### str_max_len functin #####
+; -- return end of str (in base) --
 ; int str_max_len(str, base)
 str_max_len:
     mov r11, rcx
@@ -27,7 +29,9 @@ back_str_max:
     mov rax, r11
     ret
 
-; int findChar(str, char) rdi al
+; ##### find_char function #####
+; -- return pos of char if find otherwise it return -1 --
+; int findChar(str, char) on rdi, al
 find_char:
     xor r11, r11
     jmp loop_find
@@ -48,7 +52,9 @@ return_not:
     mov rax, -1
     ret
 
-
+; ##### is_num function #####
+; -- return 1 if it's valid number otherwise 0 --
+; int is_num(int) on al
 is_num:
     cmp al, 48 ; test 0
     jl return_false
@@ -61,6 +67,9 @@ return_false:
     mov rax, 0
     ret
 
+; ##### is_whitespace function #####
+; -- return 1 if it's whitespace otherwise 0 --
+; int is_whitespace(char) on al
 is_whitespace:
     cmp al, 32 ; test ' '
     je return_true
@@ -82,6 +91,8 @@ return_true:
     mov rax, 1
     ret
 
+; ##### Start of atoi_base #####
+; int ft_atoi_base(str, base)
 ft_atoi_base:
     ; rdi -> char *str | rsi -> char *base
     mov rcx, -1
@@ -153,6 +164,7 @@ check_twice:
 get_true_src:
     pop rcx
     call str_max_len
+    sub rax, rcx
     ret
 
 
