@@ -3,6 +3,37 @@ global is_whitespace
 global is_num
 global find_char
 global str_max_len
+global get_decimal_number
+global power
+extern ft_strlen
+
+; int power(int base, int exponent) rdi, rsi
+power:
+    mov rax, 1 ; init rax 1
+    test rsi, rsi ; test exponent 0
+    jz .done
+    .power_loop:
+        imul rax, rdi ; RAX *= RDI
+        dec rsi ; decrement exponent
+    jnz .power_loop
+    .done:
+        ret
+
+; int get_decimal_number(char nb, base, exposant, lenBase) al, rsi, rdx, r9
+get_decimal_number:
+    push rdi
+    mov rdi, rsi
+    call find_char
+    mov r11, rax
+    mov rdi, r9
+    push rsi
+    mov rsi, rdx
+    call power
+    pop rsi
+    pop rdi
+    imul rax, r11
+    ret
+
 
 ; ##### str_max_len functin #####
 ; -- return end of str (in base) --
@@ -37,9 +68,9 @@ find_char:
     jmp loop_find
 
 loop_find:
-    cmp BYTE[rdi, r11], 0
+    cmp BYTE[rdi + r11], 0
     je return_not
-    cmp BYTE[rdi, r11], al
+    cmp BYTE[rdi + r11], al
     je return_find
     inc r11
     jmp loop_find
@@ -164,18 +195,42 @@ check_twice:
 get_true_src:
     pop rcx
     call str_max_len
-    sub rax, rcx
-    ret
+    sub rsp, 32 ; reserve 4 int in stack (4 * 8 octet) aligned on 16
+    mov qword [rsp], rax ; end of nbr str
+    sub rax, rcx ; get max power
+    mov qword [rsp + 8], rax ; power nbr str
+    push rdi
+    mov rdi, rsi
+    call ft_strlen
+    pop rdi
+    mov qword [rsp + 16], rax ; size of base
+    mov qword [rsp + 24], 0 ; result int
 
 
 start_conversion:
-    ; mov [r11, rdx], 0
-    mov rax, r11
-    ret
+    cmp rcx, qword [rsp]
+    jg exit_test
+    mov al, BYTE[rdi + rcx]
+    mov rdx, qword [rsp + 8]
+    mov r9, qword [rsp + 16]
+    call get_decimal_number ; (char nb, base, exposant, lenBase) al, rsi, rdx, r9
+
+    ; mov r9, qword [rsp + 24]
+    ; add r9, rax
+    ; mov qword [rsp + 24], r9
+    add qword [rsp + 24], rax
+   
+    dec qword [rsp + 8]
+    ; mov qword [rsp + 8], rdx
+    inc rcx
+    jmp start_conversion
+    
 
 exit_test:
-    pop rcx
-    mov rax, 12
+    ; imul r10, qword [rsp + 24]
+    ; mov rax, r10
+    mov rax, qword [rsp + 24]
+    add rsp, 32
     ret
 
 return_err:
