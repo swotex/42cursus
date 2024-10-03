@@ -19,7 +19,8 @@ SRC = ft_strlen.s \
 		ft_read.s \
 		ft_strdup.s
 
-BSRC = ft_atoi_base_bonus.s
+BSRC = ft_atoi_base_bonus.s \
+		ft_list_push_front_bonus.s
 
 OBJ = $(SRC:%.s=%.o)
 BOBJ = $(BSRC:%.s=%.o)

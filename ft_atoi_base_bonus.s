@@ -1,3 +1,4 @@
+; in C Piscine C4
 global ft_atoi_base
 global is_whitespace
 global is_num
@@ -227,9 +228,9 @@ start_conversion:
     
 
 exit_test:
-    ; imul r10, qword [rsp + 24]
-    ; mov rax, r10
-    mov rax, qword [rsp + 24]
+    imul r10, qword [rsp + 24]
+    mov rax, r10
+    ; mov rax, qword [rsp + 24]
     add rsp, 32
     ret
 
