@@ -10,6 +10,7 @@ ft_list_push_front:
     call malloc wrt ..plt
     pop rsi
     pop rdi
+    test rax, rax
     jz exit_error
     mov qword [rax], rsi
     mov rdx, [rdi]

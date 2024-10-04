@@ -20,7 +20,9 @@ SRC = ft_strlen.s \
 		ft_strdup.s
 
 BSRC = ft_atoi_base_bonus.s \
-		ft_list_push_front_bonus.s
+		ft_list_push_front_bonus.s \
+		ft_list_size_bonus.s \
+		ft_list_sort_bonus.s
 
 OBJ = $(SRC:%.s=%.o)
 BOBJ = $(BSRC:%.s=%.o)
