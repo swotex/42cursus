@@ -16,6 +16,7 @@ extern int ft_atoi_base(char *str, char *base);
 extern void ft_list_push_front(t_list **begin_list, void *data);
 extern int ft_list_size(t_list *begin);
 extern void ft_list_sort(t_list **begin_list, int (*cmp)());
+extern void ft_list_remove_if(t_list **begin_list, void *data_ref, int (*cmp)(), void (*free_fct)(void *));
 
 extern int ft_strcmp(const char *s1, const char *s2);
 
@@ -76,6 +77,8 @@ int main(void)
     // ft_list_sort(&test, &testee);
     // ft_list_sort(&test, &strcmp);
     ft_list_sort(&test, &ft_strcmp);
+
+    ft_list_remove_if(&test, "22", &strcmp, (void (*)(void *))free);
 
     t_list *lst = test;
     while(lst)
