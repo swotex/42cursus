@@ -2,58 +2,49 @@ global ft_list_sort
 
 ; void ft_list_sort(t_list **begin_list, int (*cmp)()) rdi, rsi
 ft_list_sort:
-	sub rsp, 16 ; save t_list beggin and func
-	mov QWORD [rsp], rdi ; save t_list
-	; mov QWORD [rsp + 8], rsi ; save func
-	mov r13, rsi ; save func
-	mov rdx, [rdi] ; unreference list in rdx
+	test rsi, rsi
+	jz quit
+	test rdi, rdi
+	jz quit
+	mov rbx, rsi ; save func
+	mov r12, rdi ; save pointer list
 
-	cmp rdx, 0 ; si list NULL
-	je exit_sorted
-	mov rbx, [rdx + 8]
+	mov rdi, [rdi] ; unreference list
+	test rdi, rdi
+	jz quit
+	jmp sort
 
-	cmp rbx, 0 ; si list +1 NULL
-	je exit_sorted
+	next:
+		mov rdi, [rdi + 8]
 
-	jmp loop
+	sort:
+		cmp qword [rdi + 8], 0
+		je quit
 
-	; rdx noeud 1 rbx noeud 2
+		mov rsi, [rdi + 8]
+		push rdi
+		push rsi
+		push rbx
+		mov rdi, [rdi]		
+		mov rsi, [rsi]
+		call rbx
+		pop rbx
+		pop rsi
+		pop rdi
+
+		test ax, ax
+		; test rax, rax
+		jle next
+
 
 	swap:
-		mov r10, [rdx]
-		mov r12, [rbx]
-		mov [rdx], r12
-		mov [rbx], r10
+		mov r10, [rdi]
+		mov r11, [rsi]
+		mov [rdi], r11
+		mov [rsi], r10
 
-	set_start:
-		mov rdx, QWORD [rsp]
-		; mov rdx, [rdx]
-		mov rbx, [rdx + 8]
+		mov rdi, [r12]
+		jmp sort
 
-	loop:
-		cmp rbx, 0
-		je exit_sorted
-
-		mov rdi, [rdx]
-		mov rsi, [rbx]
-		push rdx
-		push rbx
-		call r13
-		pop rbx
-		pop rdx
-		cmp rax, 0
-		jg swap
-
-		; next
-		next:
-			mov rdx, rbx
-			mov rbx, [rdx + 8]
-			jmp loop
-
-	exit_sorted:
-		mov rdi, [rsp]
-		; mov rsi, [rsp + 8]
-		mov rsi, r13
-		add rsp, 16
-		xor rax, rax
-		ret
+quit:
+	ret

@@ -17,6 +17,8 @@ extern void ft_list_push_front(t_list **begin_list, void *data);
 extern int ft_list_size(t_list *begin);
 extern void ft_list_sort(t_list **begin_list, int (*cmp)());
 
+extern int ft_strcmp(const char *s1, const char *s2);
+
 void putnumber(int n) {
     // Gestion des nombres négatifs
     if (n < 0) {
@@ -63,14 +65,17 @@ int main(void)
     printf("here : %d\n", back);
 
     t_list *test = NULL;
-    ft_list_push_front(&test, "aa");
-    ft_list_push_front(&test, "ab");
+    ft_list_push_front(&test, "11");
+    ft_list_push_front(&test, "22");
+    ft_list_push_front(&test, "33");
 
     int lst_size = ft_list_size(test);
 
     printf("list size : %d\n", lst_size);
 
-    ft_list_sort(&test, &testee);
+    // ft_list_sort(&test, &testee);
+    // ft_list_sort(&test, &strcmp);
+    ft_list_sort(&test, &ft_strcmp);
 
     t_list *lst = test;
     while(lst)
