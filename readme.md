@@ -1,3 +1,6 @@
+## 42 School Project
+
+### Common Core
 | Name                      | Note  | Link            |
 | --------------------- | ------ | ------------ |
 | Libft                        | 104%  | [View](https://github.com/swotex/42cursus/tree/libft)  |
@@ -16,3 +19,8 @@
 | Inception              | 125%  | [View](https://github.com/swotex/42cursus/tree/inception)  |
 | ft_irc                     | 125%  | [View](https://github.com/swotex/42cursus/tree/IRC)  |
 | ft_transcendence  | 125%  | [View](https://github.com/swotex/42cursus/tree/transcendence)  |
+
+### Specialization Project
+| Name                      | Note  | Link            |
+| --------------------- | ------ | ------------ |
+| Darkly                        | 125%  | [View](https://github.com/swotex/42cursus/tree/darkly)  |
