@@ -126,6 +126,10 @@ return_true:
 ; ##### Start of atoi_base #####
 ; int ft_atoi_base(str, base)
 ft_atoi_base:
+    test rdi, rdi
+    jz return
+    test rsi, rsi
+    jz return
     ; rdi -> char *str | rsi -> char *base
     mov rcx, -1
     mov r10, 1
@@ -236,5 +240,7 @@ exit_test:
 
 return_err:
     pop rcx
+
+return:
     mov rax, 0
     ret

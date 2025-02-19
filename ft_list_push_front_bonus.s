@@ -4,6 +4,8 @@ extern malloc
 
 ; void ft_list_push_front(t_list **list, void *data) rdi, rsi
 ft_list_push_front:
+    test rdi, rdi
+    jz exit_error
     push rdi
     push rsi
     mov rdi, 16
