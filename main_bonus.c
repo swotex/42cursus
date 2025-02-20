@@ -46,9 +46,12 @@ void printHeader(const char *str)
 
 void	ft_free(void *ptr)
 {
+    // (void)ptr;
 	// if (ptr)
-	// 	free(ptr);
+		// free(ptr);
+    printf("oui : %s \n", (char *)ptr);
     *(char *)ptr = 'X';
+    printf("oui : %s \n", (char *)ptr);
 }
 
 void print_list(t_list **lst)
@@ -201,31 +204,33 @@ void test_lst_remove()
 {
     t_list *lst = NULL;
 
-    printf("----- Test with NULL -----\n");
-    ft_list_remove_if(NULL, "test", strcmp, ft_free);
-    ft_list_remove_if(&lst, "test", strcmp, ft_free);
+    // printf("----- Test with NULL -----\n");
+    // ft_list_remove_if(NULL, "test", strcmp, ft_free);
+    // ft_list_remove_if(&lst, "test", strcmp, ft_free);
 
-    ft_list_push_front(&lst, "test");
+    // ft_list_push_front(&lst, "test");
 
-    ft_list_remove_if(NULL, "test", NULL, ft_free);
-    ft_list_remove_if(&lst, "test", strcmp, NULL);
+    // ft_list_remove_if(NULL, "test", NULL, ft_free);
+    // ft_list_remove_if(&lst, "test", strcmp, NULL);
 
-    printf("\n----- Test remove 1 top -----\n");
-    ft_list_remove_if(&lst, "test", strcmp, ft_free);
+    // printf("\n----- Test remove 1 top -----\n");
+    // ft_list_remove_if(&lst, "test", strcmp, ft_free);
 
-    ft_list_push_front(&lst, "test");
-    ft_list_push_front(&lst, "test");
+    // ft_list_push_front(&lst, "test");
+    // ft_list_push_front(&lst, "test");
 
-    printf("\n----- Test remove 2 top -----\n");
-    ft_list_remove_if(&lst, "test", strcmp, ft_free);
+    // printf("\n----- Test remove 2 top -----\n");
+    // ft_list_remove_if(&lst, "test", strcmp, ft_free);
 
-    ft_list_push_front(&lst, "sdf");
-    ft_list_push_front(&lst, "sfsdf");
-    ft_list_push_front(&lst, "test");
-    ft_list_push_front(&lst, "tesfsdfst");
+
+    ft_list_push_front(&lst, "sdf4");
+    ft_list_push_front(&lst, "sfsdf3");
+    ft_list_push_front(&lst, "test2");
+    ft_list_push_front(&lst, "test2");
+    ft_list_push_front(&lst, "tesfsdfst1");
 
     printf("\n----- Test middle remove -----\n");
-    ft_list_remove_if(&lst, "test", strcmp, ft_free);
+    ft_list_remove_if(&lst, "test2", strcmp, ft_free);
     print_list(&lst);
 
     free_list(&lst);

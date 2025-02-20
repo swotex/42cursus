@@ -1,6 +1,6 @@
 LIBNAME = libasm.a
 
-LIBNAMEB = libasm_bonus.a
+# LIBNAMEB = libasm_bonus.a
 
 NASM = nasm
 
@@ -35,27 +35,29 @@ $(LIBNAME): $(OBJ)
 	@ar rcs $(LIBNAME) $(OBJ)
 	@echo -e "\033[4;32m--- Lib created ---\n\033[0m"
 
-$(LIBNAMEB): $(OBJ) $(BOBJ)
-	@ar rcs $(LIBNAMEB) $(OBJ) $(BOBJ)
-	@echo -e "\033[4;32m--- Lib bonus created ---\n\033[0m"
+# $(LIBNAME): $(OBJ) $(BOBJ)
+# 	@ar rcs $(LIBNAME) $(OBJ) $(BOBJ)
+# 	@echo -e "\033[4;32m--- Lib bonus created ---\n\033[0m"
 
 all: $(LIBNAME)
 
-bonus: $(LIBNAMEB)
+bonus: $(OBJ) $(BOBJ)
+	@ar rcs $(LIBNAME) $(OBJ) $(BOBJ)
+	@echo -e "\033[4;32m--- Lib bonus created ---\n\033[0m"
 
 test: all
 	@$(GCC) $(GCCFLAGS) test.c $(LIBNAME) -o $(TESTNAME)
 	@echo -e "\033[4;32m--- Executable created ---\n\033[0m"
 
 test_bonus: bonus
-	@$(GCC) $(GCCFLAGS) main_bonus.c $(LIBNAMEB) -o $(TESTNAME)
+	@$(GCC) $(GCCFLAGS) main_bonus.c $(LIBNAME) -o $(TESTNAME)
 	@echo -e "\033[4;32m--- Executable bonus created ---\n\033[0m"
 
 clean:
 	@rm -rf $(OBJ) $(BOBJ)
 
 fclean: clean
-	@rm -rf $(TESTNAME) $(LIBNAME) $(LIBNAMEB)
+	@rm -rf $(TESTNAME) $(LIBNAME)
 	@echo -e "\033[4;35m--- all creations have been deleted ---\n\033[0m"
 
 re: fclean all
