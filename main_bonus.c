@@ -200,6 +200,37 @@ void test_lst_sort()
     free_list(&lst);
 }
 
+
+
+
+void	ft_list_remove_if_test(t_list **begin_list, void *data_ref, int (*cmp)(), void (*free_fct)(void *))
+{
+	t_list	*remove;
+	t_list	*current;
+
+	current = *begin_list;
+	while (current && current->next)
+	{
+		if ((*cmp)(current->next->data, data_ref) == 0)
+		{
+			remove = current->next;
+			current->next = current->next->next;
+			// free(remove);
+            (*free_fct)(remove);
+		}
+		current = current->next;
+	}
+	current = *begin_list;
+	if (current && (*cmp)(current->data, data_ref) == 0)
+	{
+		*begin_list = current->next;
+		free(current);
+	}
+}
+
+
+
+
 void test_lst_remove()
 {
     t_list *lst = NULL;
@@ -210,11 +241,12 @@ void test_lst_remove()
 
     // ft_list_push_front(&lst, "test");
 
-    // ft_list_remove_if(NULL, "test", NULL, ft_free);
+    // ft_list_remove_if(NULL, "test2", NULL, ft_free);
     // ft_list_remove_if(&lst, "test", strcmp, NULL);
 
     // printf("\n----- Test remove 1 top -----\n");
     // ft_list_remove_if(&lst, "test", strcmp, ft_free);
+    // ft_list_remove_if(&lst, "test", strcmp, free);
 
     // ft_list_push_front(&lst, "test");
     // ft_list_push_front(&lst, "test");
@@ -230,7 +262,9 @@ void test_lst_remove()
     ft_list_push_front(&lst, "tesfsdfst1");
 
     printf("\n----- Test middle remove -----\n");
-    ft_list_remove_if(&lst, "test2", strcmp, ft_free);
+    // ft_list_remove_if_test(&lst, "test2", strcmp, ft_free);
+    // ft_list_remove_if(&lst, "test2", strcmp, ft_free);
+    ft_list_remove_if(&lst, "test2", strcmp, free);
     print_list(&lst);
 
     free_list(&lst);

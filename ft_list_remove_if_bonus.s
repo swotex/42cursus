@@ -1,5 +1,20 @@
 global ft_list_remove_if
 
+%macro SAVE_CALL 0
+    push rdi
+    push rsi
+    push rdx
+    push rcx
+    push r13
+%endmacro
+
+%macro RESTORE_CALL 0
+    pop r13
+    pop rcx
+    pop rdx
+    pop rsi
+    pop rdi
+%endmacro
 ; void ft_list_remove_if(t_list **begin_list, void *data_ref, int (*cmp)(), void (*free_fct)(void *))
 ft_list_remove_if:
 ; ### Null testing ###
@@ -13,7 +28,7 @@ ft_list_remove_if:
     jz exit
 
 ; ### push 'callee-saved' in stack ###
-    push rdi
+    ; push rdi
     push rsi
     push rdx
     push rcx
@@ -25,28 +40,22 @@ ft_list_remove_if:
     test rbx, rbx
     jz restore_registers
     mov rdi, [rbx + 8] ; v2 -> lst + 1
-    mov r10, 0 ; v3 -> tmp to free
+    ; mov r10, 0 ; v3 -> tmp to free
 
 
     list_loop:
         ; test if is end of lst
         test rdi, rdi
-        jz restore_registers
+        jz remove_first
         test rbx, rbx
-        jz restore_registers
+        jz remove_first
 
-        push rdi
-        push rsi
-        ; push rbx
-        push rcx
-        push rdx
+        
+        SAVE_CALL
         mov rdi, [rdi]
         call rdx ; call cmp(v2, data)
-        pop rdx
-        pop rcx
-        ; pop rbx
-        pop rsi
-        pop rdi
+        RESTORE_CALL
+
         test rax, rax
         jz remove_it
 
@@ -61,23 +70,58 @@ ft_list_remove_if:
         ; push r10
         ; push rdi
         push qword [rdi + 8]
-        mov rdi, [rdi]
+        ; mov rdi, [rdi]
 
         ; push rsi
         ; push rbx
-        push rdx
-        push rcx
+        ; push rdx
+        ; push rcx
+
+        SAVE_CALL
 
         call rcx
 
-        pop rcx
-        pop rdx
+        RESTORE_CALL
+
+        ; pop rcx
+        ; pop rdx
         ; pop rbx
         ; pop rsi
 
         pop rdi
+        ; mov [rbx + 8], rdi
         jmp list_loop
+
     
+    remove_first:
+        mov rdi, r13
+        mov rdi, [rdi]
+        test rdi, rdi
+        jz restore_registers
+
+        SAVE_CALL
+        mov rdi, [rdi]
+        call rdx ; call cmp(lst, data)
+        RESTORE_CALL
+
+        test rax, rax
+        jnz restore_registers
+
+        ; mov rdi, [rdi]
+        ; lea r13, [rdi + 8]
+        push qword [rdi + 8]
+
+        SAVE_CALL
+
+        call rcx
+
+        RESTORE_CALL
+        ; mov rdi, [r13]
+        pop rdi
+        mov [r13], rdi
+        mov rdi, r13
+
+
 
     restore_registers:
         ; mov rdi, r13
