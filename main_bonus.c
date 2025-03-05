@@ -84,6 +84,20 @@ void free_list(t_list **lst)
     }
     
 }
+void double_free_list(t_list **lst)
+{
+    if (!lst)
+        return ;
+    t_list *tmp = *lst;
+    while(tmp)
+    {
+        t_list *to_free = tmp;
+        tmp = tmp->next;
+        free(to_free->data);
+        free(to_free);
+    }
+    
+}
 
 t_list *get_list(int size)
 {
@@ -255,19 +269,28 @@ void test_lst_remove()
     // ft_list_remove_if(&lst, "test", strcmp, ft_free);
 
 
-    ft_list_push_front(&lst, "sdf4");
-    ft_list_push_front(&lst, "sfsdf3");
-    ft_list_push_front(&lst, "test2");
-    ft_list_push_front(&lst, "test2");
-    ft_list_push_front(&lst, "tesfsdfst1");
+    // ft_list_push_front(&lst, "sdf4");
+    // ft_list_push_front(&lst, "sfsdf3");
+    // ft_list_push_front(&lst, "test2");
+    // ft_list_push_front(&lst, "test2");
+    // ft_list_push_front(&lst, "tesfsdfst1");
+
+    ft_list_push_front(&lst, strdup("milk"));
+    ft_list_push_front(&lst, strdup("bread"));
+    ft_list_push_front(&lst, strdup("milk"));
+    ft_list_push_front(&lst, strdup("apple"));
+    ft_list_push_front(&lst, strdup("ZEBRA"));
+    ft_list_push_front(&lst, strdup("tomato"));
+    ft_list_push_front(&lst, strdup("milk"));
 
     printf("\n----- Test middle remove -----\n");
     // ft_list_remove_if_test(&lst, "test2", strcmp, ft_free);
     // ft_list_remove_if(&lst, "test2", strcmp, ft_free);
-    ft_list_remove_if(&lst, "test2", strcmp, free);
+    ft_list_remove_if(&lst, "milk", strcmp, free);
     print_list(&lst);
 
-    free_list(&lst);
+    double_free_list(&lst);
+    // free_list(&lst);
 }
 
 int main(void)
