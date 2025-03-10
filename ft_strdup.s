@@ -4,12 +4,11 @@ extern ft_strlen
 extern ft_strcpy
 
 ft_strdup:
-    mov rsi, rdi
+    push rdi ; save str
     call ft_strlen
     inc rax
     mov rdi, rax
-    push rsi
-    call malloc wrt ..plt
+    call malloc wrt ..plt ; malloc strlen return
     pop rsi
     cmp rax, 0
     je error_malloc

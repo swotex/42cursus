@@ -7,6 +7,6 @@ ft_strcpy:
 		mov cl, [rsi + rax]
 		mov [rdi + rax], cl
 		cmp BYTE[rsi + rax], 0
-	jne .loopcpy
+		jne .loopcpy
 	mov rax, rdi
 	ret
