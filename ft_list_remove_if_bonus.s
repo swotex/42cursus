@@ -57,26 +57,31 @@ ft_list_remove_if:
         jmp list_loop
 
 
-    remove_item:
-        push qword [rbx + 8] ; save *secondPtr->next
-        SAVE_CALL
-        sub rsp, 8 ; Align stack
-        mov rdi, [rbx] ; select the second item
-        call rcx ; func free (secondPtr)
-        add rsp, 8 ; restore stack
-        RESTORE_CALL
-        SAVE_CALL
-        sub rsp, 8 ; Align stack
-        mov rdi, rbx ; select the second item
-        call rcx ; func free (secondPtr)
-        add rsp, 8 ; restore stack
-        RESTORE_CALL
-        pop rbx
-        mov qword [rdi + 8], rbx ; Set firstPtr->next = secondPtr->next
-        jmp list_loop
+        remove_item:
+            push qword [rbx + 8] ; save *secondPtr->next
+
+            ; free item (lst->data)
+            SAVE_CALL
+            sub rsp, 8 ; Align stack
+            mov rdi, [rbx] ; select the second item
+            call rcx ; func free
+            add rsp, 8 ; restore stack
+            RESTORE_CALL
+            ; free link (lst)
+            SAVE_CALL
+            sub rsp, 8 ; Align stack
+            mov rdi, rbx ; select the second link
+            call rcx ; func free
+            add rsp, 8 ; restore stack
+            RESTORE_CALL
+
+            pop rbx
+            mov qword [rdi + 8], rbx ; Set firstPtr->next = secondPtr->next
+            jmp list_loop
 
 
     remove_first:
+        ; Get first link and save second one
         mov rdi, [r10]
         mov rbx, qword [rdi + 8]
 
@@ -87,19 +92,21 @@ ft_list_remove_if:
         test rax, rax
         jnz exit
 
+        ; Free item (lst->data)
         SAVE_CALL
         mov rdi, [rdi]
         sub rsp, 8 ; Align stack
         call rcx ; func free (secondPtr)
         add rsp, 8 ; restore stack
         RESTORE_CALL
+        ; Free link (lst)
         SAVE_CALL
         sub rsp, 8 ; Align stack
         call rcx ; func free (secondPtr)
         add rsp, 8 ; restore stack
         RESTORE_CALL
 
-        mov [r10], rbx
+        mov [r10], rbx ; Set firt lst is second
         
 
 

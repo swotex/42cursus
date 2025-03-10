@@ -116,9 +116,19 @@ t_list *get_list(int size)
 }
 
 // ########## Tests ##########
-
+// extern int get_decimal_number(char nb, char *base, int exposant, int lenBase);
 void test_atoi_base()
 {
+    int back_test;
+    printf("----- ADD TEST -----\n");
+    back_test = ft_atoi_base("7CE", "0123456789ABCDEF");
+    printf("Result debug : %d\n", back_test);
+    // back = ft_atoi_base(" ---+--+7CE", NULL);
+    // printf("Result : %d\n", back);
+
+
+
+
     int back;
     printf("----- Test with NULL -----\n");
     back = ft_atoi_base(NULL, "0123456789ABCDEF");
@@ -215,36 +225,6 @@ void test_lst_sort()
 }
 
 
-
-
-void	ft_list_remove_if_test(t_list **begin_list, void *data_ref, int (*cmp)(), void (*free_fct)(void *))
-{
-	t_list	*remove;
-	t_list	*current;
-
-	current = *begin_list;
-	while (current && current->next)
-	{
-		if ((*cmp)(current->next->data, data_ref) == 0)
-		{
-			remove = current->next;
-			current->next = current->next->next;
-			// free(remove);
-            (*free_fct)(remove);
-		}
-		current = current->next;
-	}
-	current = *begin_list;
-	if (current && (*cmp)(current->data, data_ref) == 0)
-	{
-		*begin_list = current->next;
-		free(current);
-	}
-}
-
-
-
-
 void test_lst_remove()
 {
     t_list *lst = NULL;
@@ -284,7 +264,6 @@ void test_lst_remove()
     ft_list_push_front(&lst, strdup("milk"));
 
     printf("\n----- Test middle remove -----\n");
-    // ft_list_remove_if_test(&lst, "test2", strcmp, ft_free);
     // ft_list_remove_if(&lst, "test2", strcmp, ft_free);
     ft_list_remove_if(&lst, "milk", strcmp, free);
     print_list(&lst);

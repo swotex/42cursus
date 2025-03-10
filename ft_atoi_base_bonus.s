@@ -1,14 +1,9 @@
-; in C Piscine C4
 global ft_atoi_base
-global is_whitespace
-global is_num
-global find_char
-global str_max_len
-global get_decimal_number
-global power
 extern ft_strlen
 
-; int power(int base, int exponent) rdi, rsi
+; ##### Function power #####
+; -- int power(int base, int exponent) -> rdi, rsi --
+; return power of
 power:
     mov rax, 1 ; init rax 1
     test rsi, rsi ; test exponent 0
@@ -17,103 +12,108 @@ power:
         imul rax, rdi ; RAX *= RDI
         dec rsi ; decrement exponent
     jnz .power_loop
+    
     .done:
         ret
 
-; int get_decimal_number(char nb, base, exposant, lenBase) al, rsi, rdx, r9
+; ##### Function get_decimal_number #####
+; -- int get_decimal_number(char nb, char *base, int exposant, int lenBase) -> rdi, rsi, rdx, rcx --
+; return converted number in decimal by exponent (pos)
 get_decimal_number:
     push rdi
-    mov rdi, rsi
-    call find_char
-    mov r11, rax
-    mov rdi, r9
     push rsi
+
+    mov r11, rdi
+    mov rdi, rsi
+    mov rsi, r11
+    push rcx
+
+    call find_by_char
+    mov r11, rax
+
+    pop rcx
+    mov rdi, rcx
     mov rsi, rdx
+    push rcx
+
     call power
+
+    pop rcx
     pop rsi
     pop rdi
+
     imul rax, r11
     ret
 
 
-; ##### str_max_len functin #####
-; -- return end of str (in base) --
-; int str_max_len(str, base)
-str_max_len:
-    mov r11, rcx
-    jmp loop_str_max
+; ##### Function find_by_char #####
+; int find_by_char(char *str, char item) -> rdi, rsi
+; return pos of item otherwise return -1
+find_by_char:
+    xor rcx, rcx
 
-loop_str_max:
-    mov al, BYTE [rdi + r11]
-    push rdi
-    mov rdi, rsi
-    push r11
-    call find_char
-    pop r11
-    pop rdi
-    cmp rax, -1
-    je back_str_max
-    inc r11
-    jmp loop_str_max
+    loop_find:
+        cmp BYTE[rdi + rcx], 0
+        je return_not_found
+        mov rax, rsi
+        cmp BYTE[rdi + rcx], al
+        je return_find
+        inc rcx
+        jmp loop_find
 
-back_str_max:
-    dec r11
-    mov rax, r11
-    ret
+    return_find:
+        mov rax, rcx
+        ret
 
-; ##### find_char function #####
-; -- return pos of char if find otherwise it return -1 --
-; int findChar(str, char) on rdi, al
-find_char:
-    xor r11, r11
-    jmp loop_find
+    return_not_found:
+        mov rax, -1
+        ret
 
-loop_find:
-    cmp BYTE[rdi + r11], 0
-    je return_not
-    cmp BYTE[rdi + r11], al
-    je return_find
-    inc r11
-    jmp loop_find
 
-return_find:
-    mov rax, r11
-    ret
+; ##### Function get_real_len_str #####
+; -- int get_real_len_str(char *str, char *base) -> rdi, rsi --
+; get str+x and base, after, verify the len of str by find str[i] is in base
+get_real_len_str:
+    push rcx
+    xor rcx, rcx
 
-return_not:
-    mov rax, -1
-    ret
+    loop_str_max:
+        push rdi
+        push rsi
+        push rcx
+        mov r11, rdi ; save str
+        mov rdi, rsi ; set arg1 to base
+        movzx rsi, BYTE[r11 + rcx] ; set arg2 to str[i]
+        call find_by_char
+        pop rcx
+        pop rsi
+        pop rdi
+        cmp rax, -1
+        je return_real_len
+        inc rcx
+        jmp loop_str_max
 
-; ##### is_num function #####
-; -- return 1 if it's valid number otherwise 0 --
-; int is_num(int) on al
-is_num:
-    cmp al, 48 ; test 0
-    jl return_false
-    cmp al, 57 ; test 9
-    jg return_false
-    mov rax, 1
-    ret
-
-return_false:
-    mov rax, 0
-    ret
+    return_real_len:
+        dec rcx
+        mov rax, rcx
+        pop rcx
+        ret
 
 ; ##### is_whitespace function #####
-; -- return 1 if it's whitespace otherwise 0 --
-; int is_whitespace(char) on al
+; -- int is_whitespace(char) -> rdi --
+; return 1 if it's whitespace otherwise 0
 is_whitespace:
-    cmp al, 32 ; test ' '
+    cmp rdi, 32 ; test ' '
     je return_true
-    cmp al, 9 ; test '\t'
+    cmp rdi, 9 ; test '\t'
     je return_true
-    cmp al, 10 ; test '\n'
+    cmp rdi, 10 ; test '\n'
     je return_true
-    cmp al, 11 ; test '\v'
+    cmp rdi, 11 ; test '\v'
     je return_true
-    cmp al, 12 ; test '\f'
+    cmp rdi, 12 ; test '\f'
     je return_true
-    cmp al, 13 ; test '\r'
+    cmp rdi, 13 ; test '\r'
     je return_true
 
     mov rax, 0
@@ -123,124 +123,134 @@ return_true:
     mov rax, 1
     ret
 
-; ##### Start of atoi_base #####
-; int ft_atoi_base(str, base)
+
+; ########## Function atoi_base ##########
+; -- int ft_atoi_base(char *str, char *base) -> rdi, rsi --
 ft_atoi_base:
     test rdi, rdi
-    jz return
+    jz exit
     test rsi, rsi
-    jz return
-    ; rdi -> char *str | rsi -> char *base
+    jz exit
+
     mov rcx, -1
-    mov r10, 1
-    jmp loop_wspace_str
+    mov r10, 1 ; Final sign of str
 
-loop_wspace_str:
-    inc rcx
-    mov al, BYTE[rdi + rcx]
-    call is_whitespace
-    cmp rax, 1
-    je loop_wspace_str
-    jmp loop_sign_str
+    parse_str:
+        skip_white_space_str:
+            inc rcx
+            push rdi
+            movzx rdi, BYTE[rdi + rcx]
+            call is_whitespace
+            pop rdi
+            cmp rax, 1
+            je skip_white_space_str
+            jmp parse_sign_str
 
-change_sign:
-    neg r10
+        change_sign:
+            neg r10
+        inc_str:
+            inc rcx
+        parse_sign_str:
+            cmp BYTE[rdi + rcx], 43 ; test '+'
+            je inc_str
+            cmp BYTE[rdi + rcx], 45 ; test '-'
+            je change_sign
+            push rcx ; save start of str
+            xor rcx, rcx ; set to 0
+            jmp parse_sign_wspace_base
 
-inc_str:
-    inc rcx
+    parse_base:
+        inc_base:
+            inc rcx
+        parse_sign_wspace_base:
+            cmp BYTE[rsi + rcx], 43 ; test '+'
+            je return_err
+            cmp BYTE[rsi + rcx], 45 ; test '-'
+            je return_err
+            push rdi
+            movzx rdi, BYTE[rsi + rcx]
+            call is_whitespace ; test white-space
+            pop rdi
+            cmp rax, 1
+            je return_err
+            cmp BYTE[rsi + rcx], 0 ; test '\0'
+            je parse_twice
+            jmp inc_base
 
-loop_sign_str:
-    cmp BYTE[rdi + rcx], 43 ; test '+'
-    je inc_str
-    cmp BYTE[rdi + rcx], 45 ; test '-'
-    je change_sign
-    push rcx
-    xor rcx, rcx
-    jmp parse_base
+        parse_twice:
+            cmp rcx, 1
+            jle return_err ; error if base len == 1
+            xor rdx, rdx ; set var 1 -> 0
+            mov rcx, 1 ; set var 2 -> 1
+            jmp check_twice
 
-inc_base:
-    inc rcx
+            next_char:
+                inc rdx
+                mov rcx, rdx
+                inc rcx
 
-parse_base:
-    cmp BYTE[rsi + rcx], 43 ; test '+'
-    je return_err
-    cmp BYTE[rsi + rcx], 45 ; test '-'
-    je return_err
-    mov al, BYTE[rsi + rcx]
-    call is_whitespace
-    cmp rax, 1
-    je return_err
-    cmp BYTE[rsi + rcx], 0 ; test '\0'
-    je parse_to_twice
-    jmp inc_base
+            check_twice:
+                cmp BYTE[rsi, rdx], 0 ; if (base + var1 == 0)
+                je setup_var_convert
+                mov al, BYTE[rsi + rcx] ; get base + var2
+                cmp BYTE[rsi, rdx], al ; cmp (base + var1) == (base + var2)
+                je return_err
+                cmp al, 0
+                je next_char
+                inc rcx
+                jmp check_twice
 
-parse_to_twice:
-    cmp rcx, 1
-    jle return_err
-    xor rdx, rdx ; loop var 1 -> 0
-    mov rcx, 1 ; loop var 2 -> 0
-    jmp check_twice
+    base_convertion:
+        setup_var_convert:
+            pop rcx
 
-next_char:
-    inc rdx
-    mov rcx, rdx
-    inc rcx
+            call get_real_len_str
+            sub rsp, 32 ; reserve 4 int in stack (4 * 8 octet) aligned on 16
+            mov qword [rsp], rax ; end of number str
+            sub rax, rcx ; add start size
+            mov qword [rsp + 8], rax ; power nbr str
+            push rdi
+            mov rdi, rsi
+            call ft_strlen
+            pop rdi
+            mov qword [rsp + 16], rax ; size of base
+            mov qword [rsp + 24], 0 ; result int
 
-check_twice:
-    cmp BYTE[rsi, rdx], 0
-    je get_true_src
-    mov al, BYTE[rsi + rcx]
-    cmp BYTE[rsi, rdx], al
-    je return_err
-    cmp al, 0
-    je next_char
-    inc rcx
-    jmp check_twice
+            convert_str:
+                cmp rcx, qword [rsp] ; if rcx ==  end of str (can be convert)
+                jg exit_success
 
-get_true_src:
-    pop rcx
-    call str_max_len
-    sub rsp, 32 ; reserve 4 int in stack (4 * 8 octet) aligned on 16
-    mov qword [rsp], rax ; end of nbr str
-    sub rax, rcx ; get max power
-    mov qword [rsp + 8], rax ; power nbr str
-    push rdi
-    mov rdi, rsi
-    call ft_strlen
-    pop rdi
-    mov qword [rsp + 16], rax ; size of base
-    mov qword [rsp + 24], 0 ; result int
+                push rdi
+                push rsi
+                push rdx
+                push rcx
+
+                movzx rdi, BYTE[rdi + rcx]
+                mov rdx, qword [rsp + 40]
+                mov rcx, qword [rsp + 48]
+
+                call get_decimal_number ; (char nb, base, exposant, lenBase) rdi (di), rsi, rdx, rcx
+
+                pop rcx
+                pop rdx
+                pop rsi
+                pop rdi
+
+                add qword [rsp + 24], rax ; add result of get_decimal_number in final number
+                dec qword [rsp + 8] ; decrement power
+
+                inc rcx
+                jmp convert_str
 
 
-start_conversion:
-    cmp rcx, qword [rsp]
-    jg exit_test
-    mov al, BYTE[rdi + rcx]
-    mov rdx, qword [rsp + 8]
-    mov r9, qword [rsp + 16]
-    call get_decimal_number ; (char nb, base, exposant, lenBase) al, rsi, rdx, r9
-
-    ; mov r9, qword [rsp + 24]
-    ; add r9, rax
-    ; mov qword [rsp + 24], r9
-    add qword [rsp + 24], rax
-   
-    dec qword [rsp + 8]
-    ; mov qword [rsp + 8], rdx
-    inc rcx
-    jmp start_conversion
-    
-
-exit_test:
+exit_success:
     imul r10, qword [rsp + 24]
     mov rax, r10
-    ; mov rax, qword [rsp + 24]
     add rsp, 32
     ret
 
 return_err:
     pop rcx
-
-return:
-    mov rax, 0
+exit:
+    xor rax, rax ; set to 0
     ret
