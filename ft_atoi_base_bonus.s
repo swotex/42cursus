@@ -75,7 +75,6 @@ find_by_char:
 ; get str+x and base, after, verify the len of str by find str[i] is in base
 get_real_len_str:
     push rcx
-    xor rcx, rcx
 
     loop_str_max:
         push rdi

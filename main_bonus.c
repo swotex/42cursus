@@ -116,19 +116,8 @@ t_list *get_list(int size)
 }
 
 // ########## Tests ##########
-// extern int get_decimal_number(char nb, char *base, int exposant, int lenBase);
 void test_atoi_base()
 {
-    int back_test;
-    printf("----- ADD TEST -----\n");
-    back_test = ft_atoi_base("7CE", "0123456789ABCDEF");
-    printf("Result debug : %d\n", back_test);
-    // back = ft_atoi_base(" ---+--+7CE", NULL);
-    // printf("Result : %d\n", back);
-
-
-
-
     int back;
     printf("----- Test with NULL -----\n");
     back = ft_atoi_base(NULL, "0123456789ABCDEF");
