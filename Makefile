@@ -50,7 +50,7 @@ test: all
 	@echo -e "\033[4;32m--- Executable created ---\n\033[0m"
 
 test_bonus: bonus
-	@$(GCC) $(GCCFLAGS) main_bonus.c $(LIBNAME) -o $(TESTNAME)
+	@$(GCC) $(GCCFLAGS) test_bonus.c $(LIBNAME) -o $(TESTNAME)
 	@echo -e "\033[4;32m--- Executable bonus created ---\n\033[0m"
 
 clean:
