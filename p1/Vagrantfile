@@ -1,0 +1,39 @@
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+	config.vm.box = "generic/alpine319"
+
+	config.ssh.forward_agent = true
+	config.ssh.insert_key = false
+	config.vm.synced_folder "./shareData", "/vagrant_data", create: true
+
+	config.vm.define "njegatS" do |njegatS_config|
+		njegatS_config.vm.hostname = "njegatS"
+		njegatS_config.vm.network :private_network, ip: "192.168.56.110"
+
+		njegatS_config.vm.provider :virtualbox do |vb|
+			vb.gui = false
+
+			vb.memory = "512"
+			vb.cpus = "1"
+		end
+
+		njegatS_config.vm.provision "shell", path: "./scripts/server.sh"
+	end
+
+
+	config.vm.define "njegatSW" do |njegatSW_config|
+		njegatSW_config.vm.hostname = "njegatSW"
+		njegatSW_config.vm.network :private_network, ip: "192.168.56.111"
+
+		njegatSW_config.vm.provider :virtualbox do |vb|
+			vb.gui = false
+
+			vb.memory = "512"
+			vb.cpus = "1"
+		end
+
+		njegatSW_config.vm.provision "shell", path: "./scripts/worker.sh"
+	end
+end
