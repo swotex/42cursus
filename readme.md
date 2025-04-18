@@ -12,7 +12,7 @@
 | Push_swap         |     C                 |2   | 125%  | [View](https://github.com/swotex/42cursus/tree/push_swap)  |
 | Minishell         |     C                 |2   | 101%  | [View](https://github.com/swotex/42cursus/tree/minishell)  |
 | Philosophers      |     C                 |2  | 125%  | [View](https://github.com/swotex/42cursus/tree/philo)  |
-| Netpractice       |    N/A                |2  | 100%  | [View](https://github.com/swotex/42cursus/tree/net_practice)  |
+| Netpractice       |    Network            |2  | 100%  | [View](https://github.com/swotex/42cursus/tree/net_practice)  |
 | CPP 00-04         |    C++                |2 | 125%  | [View](https://github.com/swotex/42cursus/tree/cpp_00-04)  |
 | Cub3D             |     C                 |2 | 125%  | [View](https://github.com/swotex/42cursus/tree/cub3d)  |
 | CPP 05-09         |    C++                |2 | 100%  | [View](https://github.com/swotex/42cursus/tree/cpp_05-09)  |
