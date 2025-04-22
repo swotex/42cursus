@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app3
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: app3
+  template:
+    metadata:
+      labels:
+        app: app3
+    spec:
+      containers:
+      - name: httpd
+        image: httpd
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: app1-volume
+          mountPath: /usr/local/apache2/htdocs
+      volumes:
+      - name: app1-volume
+        hostPath:
+          path: /opt/html/app3
+          type: Directory
