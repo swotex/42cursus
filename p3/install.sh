@@ -1,4 +1,4 @@
-# install k3d, docker ^20.10.5, kubectl, curl
+# Need k3d, docker ^20.10.5, kubectl, curl
 
 echo "\033[1;33mInstall dependancies...\033[0m"
 sudo apt install docker.io curl
