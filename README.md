@@ -19,6 +19,12 @@ Reimplement a simplified version of `printf` with support for several format spe
 |   `%X`   | Uppercase hexadecimal    |
 |   `%%`   | Literal percent sign     |
 
+### 📌 Constraints
+
+- no use of standard `printf`, `sprintf`, or `asprintf`
+- only `write`, `malloc`, `free`, `va_start`, `va_arg`, `va_copy` and `va_end` are allowed
+- must follow 42 coding standards
+
 ### ⚙️ Install
 
 ```bash
@@ -27,7 +33,7 @@ make
 
 ### 🧪 Usage
 
-Include in your your project
+Include in your project
 
 ```c
 #include "ft_printf.h"
@@ -38,12 +44,6 @@ And compile with the created archive
 ```bash
 gcc main.c libftprintf.a
 ```
-
-### 📌 Constraints
-
-- no use of standard `printf`, `sprintf`, or `asprintf`
-- only `write`, `malloc`, `free`, `va_start`, `va_arg`, `va_copy` and `va_end` are allowed
-- must follow 42 coding standards
 
 ### ✅ Pedagogical objectives
 
