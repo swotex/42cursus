@@ -8,21 +8,21 @@ Libft is a project to recreate certain functions of the standard C library, whil
 
 The libft consists of three main parts :
 
-##### 1. First part: libc functions
+#### 1. First part: libc functions
 
-- `memset`, `memcpy`, `memmove`
-- `strlen`, `strchr`, `strrchr`, `strncmp`
-- `strlcpy`, `strlcat`
+- `memset`, `memcpy`, `memmove`, `memcmp`, `memchr`
+- `strlen`, `strchr`, `strrchr`, `strncmp`, `strdup`, `strnstr`, `strlcpy`, `strlcat`
+- `isalum`, `isalpha`, `isascii`, `isdigit`, `isprint`
 - `atoi`, `calloc`, `bzero`
 - `toupper`, `tolower`
 
-##### 2. Second part: utilities functions
+#### 2. Second part: utilities functions
 
 - `substr`, `strjoin`, `strtrim`, `split`
 - `itoa`, `strmapi`, `striteri`
 - `putchar_fd`, `putstr_fd`, `putendl_fd`, `putnbr_fd`
 
-##### 3. Bonus part: liked list functions
+#### 3. Bonus part: liked list functions
 
 - `ft_lstnew`, `ft_lstadd_front`, `ft_lstsize`, `ft_lstlast`
 - `ft_lstadd_back`, `ft_lstdelone`, `ft_lstclear`, `ft_lstiter`, `ft_lstmap`
@@ -65,5 +65,5 @@ gcc main.c libft.a
 
 ### 🏁 Project Status
 
-Finished with bonus
-Final score: 104%
+Finished with bonus.
+Final score: **104%**
