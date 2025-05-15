@@ -1,0 +1,45 @@
+global:
+  edition: ce
+
+  hosts:
+    domain: github.local
+    externalIP: 172.17.0.1
+    externalUrl: "http://gitlab.local"
+
+  ingress:
+    enabled: false
+    configureCertmanager: false
+
+gitlab:  
+  webservice:
+    replicas: 1
+  sidekiq:
+    replicas: 1
+  gitlab-shell:
+    replicas: 1
+    service:
+      type: NodePort
+      nodePort: 31212
+
+gitlab-runner:
+  install: false
+
+shell:
+  port: 31212
+
+registry:
+  hpa:
+    replicas: 1  
+
+nginx-ingress:
+  enabled: false
+
+certmanager:
+  install: false
+
+prometheus:
+  install: false
+
+rails:
+  bootsnap:
+    enabled: false
