@@ -45,7 +45,7 @@ And compile with the created archive
 gcc main.c libftprintf.a
 ```
 
-### ✅ Pedagogical objectives
+### 🎓 Pedagogical objectives
 
 - Handling variadic functions (stdarg.h)
 - Parsing and interpreting format strings
