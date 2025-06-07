@@ -83,7 +83,7 @@ std::string	callAI(std::string msg)
 	safeQuote(cmd);
 
 	std::string	call =  "curl --location --insecure --request POST 'https://api.openai.com/v1/chat/completions' \
---header 'Authorization: Bearer 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' \
+--header 'Authorization: Bearer <API_TOKEN>' \
 --header 'Content-Type: application/json' \
 --data-raw '{ \"model\": \"gpt-3.5-turbo\", \"messages\": [{\"role\": \"user\", \"content\": \"" + cmd + "\"}]}' > answer.json";
 
