@@ -4,7 +4,7 @@ metadata:
   name: gitlab-ingress
 spec:
   rules:
-  - host: github.local
+  - host: gitlab.local
     http:
       paths:
       - path: /
@@ -13,4 +13,4 @@ spec:
           service:
             name: gitlab-webservice-default
             port:
-              number: 8083
+              number: 8181
