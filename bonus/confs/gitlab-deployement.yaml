@@ -2,9 +2,9 @@ global:
   edition: ce
 
   hosts:
-    domain: github.local
+    domain: gitlab.local
     externalIP: 172.17.0.1
-    externalUrl: "http://gitlab.local"
+    externalUrl: "https://gitlab.local"
 
   ingress:
     enabled: false
