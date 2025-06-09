@@ -27,10 +27,7 @@ echo "\n\033[1;35m✅ Docker daemon is ready !\033[0m"
 echo "\n\033[1;34m🚀 Create cluster\033[0m\n"
 sudo k3d cluster create XCluster \
   --servers 1 --agents 2 \
-  --api-port 6550 \
-  -p "80:80@loadbalancer" \
-  -p "443:443@loadbalancer" \
-  -p "8888:1212@loadbalancer"
+  --api-port 6550 
 
 
 # --- Creating namespace ---
@@ -53,8 +50,8 @@ sudo kubectl apply -n gitlab -f confs/gitlab-ingress.yaml
 
 echo "\n\033[1;34m🚀 Deploying argoCD\033[0m\n"
 sudo kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-sudo kubectl -n argocd patch svc argocd-server \
-  -p '{"spec": {"type": "LoadBalancer"}}'
+#sudo kubectl -n argocd patch svc argocd-server \
+#  -p '{"spec": {"type": "LoadBalancer"}}'
 
 
 # --- Update hosts ---
@@ -77,64 +74,64 @@ echo "⏳ Waiting for GitLab to be ready..."
 sudo kubectl wait deployment gitlab-webservice-default \
   -n gitlab \
   --for=condition=Available=True \
-  --timeout=120s
+  --timeout=180s
 
 # --- Retrieve GitLab root password and generate a private token
 GITLAB_ROOT_PWD=$(sudo kubectl -n gitlab get secret gitlab-gitlab-initial-root-password -o jsonpath="{.data.password}" | base64 -d)
-GITLAB_TOKEN=$(curl -s --request POST "http://root:${GITLAB_ROOT_PWD}@gitlab.local/api/v4/session" \
-  --data "login=root&password=${GITLAB_ROOT_PWD}" | jq -r .private_token)
+echo "password root gitlab: " ${GITLAB_ROOT_PWD}
+#GITLAB_TOKEN=$(curl -s --request POST "http://root:${GITLAB_ROOT_PWD}@gitlab.local/api/v4/session" \
+#  --data "login=root&password=${GITLAB_ROOT_PWD}" | jq -r .private_token)
 
-exit
 
 # --- Create a new project in GitLab ---
-PROJECT_JSON=$(curl -s --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
-  --data "name=njegat_iot_website&namespace_id=1" \
-  http://gitlab.local/api/v4/projects)
-REPO_URL=$(jq -r .http_url_to_repo <<<"${PROJECT_JSON}")
+#PROJECT_JSON=$(curl -s --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
+#  --data "name=njegat_iot_website&namespace_id=1" \
+#  http://gitlab.local/api/v4/projects)
+#REPO_URL=$(jq -r .http_url_to_repo <<<"${PROJECT_JSON}")
 
 
 # 10. Initialize repository with sample k8s manifests
-git clone ${REPO_URL} app_repo
-git -C app_repo checkout -b main || true
-mkdir -p app_repo/k8s
-cat <<EOF >app_repo/k8s/deployment.yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: njegat_iot_website
-  namespace: dev
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: njegat_iot_website
-  template:
-    metadata:
-      labels:
-        app: njegat_iot_website
-    spec:
-      containers:
-      - name: nginx
-        image: nginx:alpine
-        ports:
-        - containerPort: 80
-EOF
-cat <<EOF >app_repo/k8s/service.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: njegat_iot_website
-  namespace: dev
-spec:
-  selector:
-    app: njegat_iot_website
-  ports:
-  - port: 80
-    targetPort: 80
-EOF
-git -C app_repo add .
-git -C app_repo commit -m "Initial k8s manifests"
-git -C app_repo push origin main
+#git clone ${REPO_URL} app_repo
+#git -C app_repo checkout -b main || true
+#mkdir -p app_repo/k8s
+#cat <<EOF >app_repo/k8s/deployment.yaml
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: njegat_iot_website
+#  namespace: dev
+#spec:
+#  replicas: 1
+#  selector:
+#    matchLabels:
+#      app: njegat_iot_website
+#  template:
+#    metadata:
+#      labels:
+#        app: njegat_iot_website
+#    spec:
+#      containers:
+#      - name: nginx
+#        image: nginx:alpine
+#        ports:
+#        - containerPort: 80
+#EOF
+#cat <<EOF >app_repo/k8s/service.yaml
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: njegat_iot_website
+#  namespace: dev
+#spec:
+#  selector:
+#    app: njegat_iot_website
+#  ports:
+#  - port: 80
+#    targetPort: 80
+#EOF
+#git -C app_repo add .
+#git -C app_repo commit -m "Initial k8s manifests"
+#git -C app_repo push origin main
 
 # Deploy App git in argoCD
 # sudo kubectl apply -f ./confs/app.yaml en attente
@@ -150,7 +147,37 @@ echo "$PWD_ARGOCD\n"
 
 # --- Print ArgoCD/App link ---
 ARGO_IP=$(sudo kubectl -n argocd get svc argocd-server -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-echo "ArgoCD: https://$ARGO_IP - App: http://$ARGO_IP:1212"
-echo "----- or -----"
-echo "ArgoCD: https://localhost:8443 - App: http://localhost:8888"
+#echo "ArgoCD: https://$ARGO_IP - App: http://$ARGO_IP:1212"
+#echo "----- or -----"
+echo "ArgoCD: https://localhost:8080 - App: http://localhost:8888"
 
+sudo kubectl port-forward svc/argocd-server -n argocd 8080:80
+
+
+response=$(curl --silent --show-error --fail --request POST "$GITLAB_URL/api/v4/projects" \
+  --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
+  --form "name=$PROJECT_NAME" \
+  --form "namespace_id=$(curl --silent --header "PRIVATE-TOKEN: $GITLAB_TOKEN" "$GITLAB_URL/api/v4/namespaces?search=$NAMESPACE" | jq '.[0].id')" \
+  --form "initialize_with_readme=true" \
+  --form "visibility=public")
+
+
+  project_http_url=$(echo "$response" | jq -r '.http_url_to_repo')
+
+echo "Projet créé à l'adresse : $project_http_url"
+
+# 2. Initialiser un projet local git minimal (si tu veux ajouter des fichiers custom)
+mkdir -p "$LOCAL_DIR"
+cd "$LOCAL_DIR"
+git init
+git add README.md
+git commit -m "Initial commit"
+
+# 3. Ajouter le remote et pousser
+#git remote add origin "$project_http_url"
+git remote add origin https://oauth2:<GITLAB_TOKEN>@gitlab.local/root/$PROJECT_NAME.git
+git push -u origin master
+
+echo "Le projet a été initialisé et poussé vers GitLab."
+
+https://gitlab.github.local/root/test_project.git
