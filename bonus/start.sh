@@ -152,32 +152,3 @@ ARGO_IP=$(sudo kubectl -n argocd get svc argocd-server -o jsonpath='{.status.loa
 echo "ArgoCD: https://localhost:8080 - App: http://localhost:8888"
 
 sudo kubectl port-forward svc/argocd-server -n argocd 8080:80
-
-
-response=$(curl --silent --show-error --fail --request POST "$GITLAB_URL/api/v4/projects" \
-  --header "PRIVATE-TOKEN: $GITLAB_TOKEN" \
-  --form "name=$PROJECT_NAME" \
-  --form "namespace_id=$(curl --silent --header "PRIVATE-TOKEN: $GITLAB_TOKEN" "$GITLAB_URL/api/v4/namespaces?search=$NAMESPACE" | jq '.[0].id')" \
-  --form "initialize_with_readme=true" \
-  --form "visibility=public")
-
-
-  project_http_url=$(echo "$response" | jq -r '.http_url_to_repo')
-
-echo "Projet créé à l'adresse : $project_http_url"
-
-# 2. Initialiser un projet local git minimal (si tu veux ajouter des fichiers custom)
-mkdir -p "$LOCAL_DIR"
-cd "$LOCAL_DIR"
-git init
-git add README.md
-git commit -m "Initial commit"
-
-# 3. Ajouter le remote et pousser
-#git remote add origin "$project_http_url"
-git remote add origin https://oauth2:<GITLAB_TOKEN>@gitlab.local/root/$PROJECT_NAME.git
-git push -u origin master
-
-echo "Le projet a été initialisé et poussé vers GitLab."
-
-https://gitlab.github.local/root/test_project.git
