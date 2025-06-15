@@ -62,9 +62,6 @@ EOF
 
 
 echo "⏳ Waiting for ArgoCD to be ready..."
-#kubectl -n gitlab rollout status deployment/gitlab-webservice-default --timeout=600s
-#kubectl -n argocd rollout status deployment/argocd-server --timeout=120s
-
 sudo kubectl wait deployment argocd-server \
   -n argocd \
   --for=condition=Available=True \
@@ -82,59 +79,6 @@ echo "password root gitlab: " ${GITLAB_ROOT_PWD}
 #GITLAB_TOKEN=$(curl -s --request POST "http://root:${GITLAB_ROOT_PWD}@gitlab.local/api/v4/session" \
 #  --data "login=root&password=${GITLAB_ROOT_PWD}" | jq -r .private_token)
 
-
-# --- Create a new project in GitLab ---
-#PROJECT_JSON=$(curl -s --header "PRIVATE-TOKEN: ${GITLAB_TOKEN}" \
-#  --data "name=njegat_iot_website&namespace_id=1" \
-#  http://gitlab.local/api/v4/projects)
-#REPO_URL=$(jq -r .http_url_to_repo <<<"${PROJECT_JSON}")
-
-
-# 10. Initialize repository with sample k8s manifests
-#git clone ${REPO_URL} app_repo
-#git -C app_repo checkout -b main || true
-#mkdir -p app_repo/k8s
-#cat <<EOF >app_repo/k8s/deployment.yaml
-#apiVersion: apps/v1
-#kind: Deployment
-#metadata:
-#  name: njegat_iot_website
-#  namespace: dev
-#spec:
-#  replicas: 1
-#  selector:
-#    matchLabels:
-#      app: njegat_iot_website
-#  template:
-#    metadata:
-#      labels:
-#        app: njegat_iot_website
-#    spec:
-#      containers:
-#      - name: nginx
-#        image: nginx:alpine
-#        ports:
-#        - containerPort: 80
-#EOF
-#cat <<EOF >app_repo/k8s/service.yaml
-#apiVersion: v1
-#kind: Service
-#metadata:
-#  name: njegat_iot_website
-#  namespace: dev
-#spec:
-#  selector:
-#    app: njegat_iot_website
-#  ports:
-#  - port: 80
-#    targetPort: 80
-#EOF
-#git -C app_repo add .
-#git -C app_repo commit -m "Initial k8s manifests"
-#git -C app_repo push origin main
-
-# Deploy App git in argoCD
-# sudo kubectl apply -f ./confs/app.yaml en attente
 
 # --- Get ArgoCD credentials ---
 
