@@ -27,7 +27,7 @@ echo "\n\033[1;35m✅ Docker daemon is ready !\033[0m"
 echo "\n\033[1;34m🚀 Create cluster\033[0m\n"
 sudo k3d cluster create XCluster \
   --servers 1 --agents 2 \
-  --api-port 6550 
+  --api-port 6550
 
 
 # --- Creating namespace ---
@@ -56,7 +56,7 @@ sudo kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-
 
 # --- Update hosts ---
 sudo tee -a /etc/hosts <<EOF
-172.17.0.1 gitlab.local
+172.18.0.2 gitlab.local
 127.0.0.1 argocd.local
 EOF
 

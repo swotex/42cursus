@@ -7,8 +7,8 @@ spec:
   project: default
 
   source:
-    repoURL: https://gitlab.local/root/njegat_iot_website
-    targetRevision: main
+    repoURL: http://gitlab-webservice-default.gitlab.svc.cluster.local:8181/root/njegat_iot_website.git
+    targetRevision: master
     path: ./
 
   destination:

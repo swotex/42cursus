@@ -3,7 +3,7 @@ global:
 
   hosts:
     domain: gitlab.local
-    externalIP: 172.17.0.1
+    externalIP: 172.18.0.2
     externalUrl: "https://gitlab.local"
 
   ingress:

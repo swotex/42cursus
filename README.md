@@ -23,7 +23,20 @@ The project is divided into several parts:
 
 ### 🚀 Deployment Instructions
 
-...
+```bash
+#P1
+vagrant up
+
+#P2
+./start.sh
+
+#P3
+./start.sh
+
+#bonus
+./start.sh
+create_repo.sh
+```
 
 ### 🧑‍💻 Author
 
