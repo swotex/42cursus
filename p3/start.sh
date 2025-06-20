@@ -6,7 +6,7 @@ version_minimale="20.10.5"
 version_installee=$(docker --version | awk '{print $3}' | tr -d ',')
 
 if [ "$(printf '%s\n' "$version_minimale" "$version_installee" | sort -V | head -n1)" != "$version_minimale" ]; then
-    echo "Docker is too old (version $version_installee < $version_minimale)"
+    echo -e "\033[1;31mDocker is too old (version $version_installee < $version_minimale)\033[0m"
     exit 1
 fi
 
@@ -20,11 +20,11 @@ if [ $? -ne 0 ]; then
     done
 fi
 
-echo "\n\033[1;35m✅ Docker daemon is ready !\033[0m"
+echo -e "\n\033[1;35m✅ Docker daemon is ready !\033[0m"
 
 # --- k3s cluster ---
 
-echo "\n\033[1;34m🚀 Create cluster\033[0m\n"
+echo -e "\n\033[1;34m🚀 Create cluster\033[0m\n"
 sudo k3d cluster create XCluster \
   --servers 1 --agents 2 \
   --api-port 6550 \
@@ -34,7 +34,7 @@ sudo k3d cluster create XCluster \
 
 # --- ArgoCD deployement ---
 
-echo "\n\033[1;34m🚀 Deploying argoCD\033[0m\n"
+echo -e "\n\033[1;34m🚀 Deploying argoCD\033[0m\n"
 sudo kubectl create namespace argocd
 sudo kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 sudo kubectl -n argocd patch svc argocd-server \
@@ -52,10 +52,10 @@ sudo kubectl apply -f ./confs/app.yaml
 # --- Get ArgoCD credentials ---
 
 PWD_ARGOCD=$(sudo kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
-echo "\n\033[1;34m🔑 ArgoCD credencial\033[0m"
-echo "\033[1;35mUser:\033[0m"
+echo -e "\n\033[1;34m🔑 ArgoCD credencial\033[0m"
+echo -e "\033[1;35mUser:\033[0m"
 echo "admin"
-echo "\033[1;35mPassword:\033[0m"
+echo -e "\033[1;35mPassword:\033[0m"
 echo "$PWD_ARGOCD\n"
 
 # --- Print ArgoCD/App link ---
