@@ -1,4 +1,4 @@
-#sh ./install.sh
+sh ./install.sh
 
 # --- docker part ---
 
@@ -88,6 +88,10 @@ echo -e "\033[1;35mUser:\033[0m"
 echo "admin"
 echo -e "\033[1;35mPassword:\033[0m"
 echo "$PWD_ARGOCD\n"
+
+GITLAB_IP=$(sudo kubectl -n gitlab get ingress -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}')
+grep -v '[[:space:]]argocd\.local' /etc/hosts > /tmp/hosts
+grep -v '[[:space:]]gitlab\.local' /tmp/hosts > /tmp/hosts
 
 # --- Print ArgoCD/App link ---
 ARGO_IP=$(sudo kubectl -n argocd get svc argocd-server -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
