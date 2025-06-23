@@ -23,12 +23,10 @@ fi
 echo -e "\n\033[1;35m✅ Docker daemon is ready !\033[0m"
 
 # --- k3s cluster ---
-
 echo -e "\n\033[1;34m🚀 Create cluster\033[0m\n"
 sudo k3d cluster create XCluster \
   --servers 1 --agents 2 \
   --api-port 6550
-
 
 # --- Creating namespace ---
 sudo kubectl create namespace argocd
@@ -47,20 +45,10 @@ sudo kubectl apply -n gitlab -f confs/gitlab-ingress.yaml
 
 
 # --- ArgoCD deployement ---
-
 echo -e "\n\033[1;34m🚀 Deploying argoCD\033[0m\n"
 sudo kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-#sudo kubectl -n argocd patch svc argocd-server \
-#  -p '{"spec": {"type": "LoadBalancer"}}'
 
-
-# --- Update hosts ---
-sudo tee -a /etc/hosts <<EOF
-172.18.0.2 gitlab.local
-127.0.0.1 argocd.local
-EOF
-
-
+# --- Waitting pods up ---
 echo "⏳ Waiting for ArgoCD to be ready..."
 sudo kubectl wait deployment argocd-server \
   -n argocd \
@@ -73,15 +61,19 @@ sudo kubectl wait deployment gitlab-webservice-default \
   --for=condition=Available=True \
   --timeout=240s
 
-# --- Retrieve GitLab root password and generate a private token
+# --- Retrieve GitLab root password
 GITLAB_ROOT_PWD=$(sudo kubectl -n gitlab get secret gitlab-gitlab-initial-root-password -o jsonpath="{.data.password}" | base64 -d)
 echo "password root gitlab: " ${GITLAB_ROOT_PWD}
-#GITLAB_TOKEN=$(curl -s --request POST "http://root:${GITLAB_ROOT_PWD}@gitlab.local/api/v4/session" \
-#  --data "login=root&password=${GITLAB_ROOT_PWD}" | jq -r .private_token)
 
+# --- Set hostname in hosts file ---
+GITLAB_IP=$(sudo kubectl -n gitlab get ingress -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}')
+grep -v '[[:space:]]argocd\.local' /etc/hosts > /tmp/hosts
+grep -v '[[:space:]]gitlab\.local' /tmp/hosts > /tmp/hosts
+echo "$GITLAB_IP  gitlab.local" >> /tmp/hosts
+echo "127.0.0.1  argocd.local" >> /tmp/hosts
+sudo cp /tmp/hosts /etc/hosts
 
 # --- Get ArgoCD credentials ---
-
 PWD_ARGOCD=$(sudo kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
 echo -e "\n\033[1;34m🔑 ArgoCD credencial\033[0m"
 echo -e "\033[1;35mUser:\033[0m"
@@ -89,14 +81,7 @@ echo "admin"
 echo -e "\033[1;35mPassword:\033[0m"
 echo "$PWD_ARGOCD\n"
 
-GITLAB_IP=$(sudo kubectl -n gitlab get ingress -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}')
-grep -v '[[:space:]]argocd\.local' /etc/hosts > /tmp/hosts
-grep -v '[[:space:]]gitlab\.local' /tmp/hosts > /tmp/hosts
-
-# --- Print ArgoCD/App link ---
-ARGO_IP=$(sudo kubectl -n argocd get svc argocd-server -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-#echo "ArgoCD: https://$ARGO_IP - App: http://$ARGO_IP:1212"
-#echo "----- or -----"
-echo "ArgoCD: https://localhost:8080 - App: http://localhost:8888"
+# --- Print Gitlab/ArgoCD/App link ---
+echo "Gitlab: https://gitlab.local - ArgoCD: https://argocd.local:8080 - App: http://localhost:8888"
 
 sudo kubectl port-forward svc/argocd-server -n argocd 8080:80
