@@ -2,8 +2,8 @@ global:
   edition: ce
 
   hosts:
-    domain: gitlab.local
-    externalIP: 172.18.0.2
+    domain: local
+    host: gitlab.local
     externalUrl: "https://gitlab.local"
 
   ingress:
@@ -34,8 +34,7 @@ registry:
 nginx-ingress:
   enabled: false
 
-certmanager:
-  install: false
+installCertmanager: false
 
 prometheus:
   install: false

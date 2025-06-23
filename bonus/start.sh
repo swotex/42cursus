@@ -59,7 +59,7 @@ echo "⏳ Waiting for GitLab to be ready..."
 sudo kubectl wait deployment gitlab-webservice-default \
   -n gitlab \
   --for=condition=Available=True \
-  --timeout=240s
+  --timeout=300s
 
 # --- Retrieve GitLab root password
 GITLAB_ROOT_PWD=$(sudo kubectl -n gitlab get secret gitlab-gitlab-initial-root-password -o jsonpath="{.data.password}" | base64 -d)
@@ -82,6 +82,6 @@ echo -e "\033[1;35mPassword:\033[0m"
 echo "$PWD_ARGOCD\n"
 
 # --- Print Gitlab/ArgoCD/App link ---
-echo "Gitlab: https://gitlab.local - ArgoCD: https://argocd.local:8080 - App: http://localhost:8888"
+echo "Gitlab: https://gitlab.local - ArgoCD: https://argocd.local:8080 - App: http://$GITLAB_IP:1212"
 
 sudo kubectl port-forward svc/argocd-server -n argocd 8080:80

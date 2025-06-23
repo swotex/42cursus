@@ -33,6 +33,7 @@ git add .
 git commit -m "Initial commit"
 git push -u origin master
 
+cd ../
 rm -rf $LOCAL_DIR
 
 sudo kubectl apply -f ./confs/app.yaml
