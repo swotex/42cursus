@@ -41,3 +41,5 @@ create_repo.sh
 ### 🧑‍💻 Author
 
 [njegat](https://https://github.com/swotex)
+[tdhaussy](https://https://github.com/Rreyth)
+[ltuffery](https://https://github.com/ltuffery)
