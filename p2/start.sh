@@ -2,6 +2,13 @@ vagrant up
 
 sleep 3
 
+grep -v '[[:space:]]app1\.com' /etc/hosts > /tmp/hosts
+grep -v '[[:space:]]app2\.com' /tmp/hosts > /tmp/hosts2
+grep -v '[[:space:]]app2\.com' /tmp/hosts2 > /tmp/hosts
+echo "192.168.56.110  app1.com" >> /tmp/hosts
+echo "192.168.56.110  app2.com" >> /tmp/hosts
+echo "192.168.56.110  app3.com" >> /tmp/hosts
+sudo cp /tmp/hosts /etc/hosts
 
 APP1_URL="http://app1.com"
 APP2_URL="http://app2.com"
