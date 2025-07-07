@@ -68,10 +68,10 @@ echo "password root gitlab: " ${GITLAB_ROOT_PWD}
 # --- Set hostname in hosts file ---
 GITLAB_IP=$(sudo kubectl -n gitlab get ingress -o jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}')
 grep -v '[[:space:]]argocd\.local' /etc/hosts > /tmp/hosts
-grep -v '[[:space:]]gitlab\.local' /tmp/hosts > /tmp/hosts
-echo "$GITLAB_IP  gitlab.local" >> /tmp/hosts
-echo "127.0.0.1  argocd.local" >> /tmp/hosts
-sudo cp /tmp/hosts /etc/hosts
+grep -v '[[:space:]]gitlab\.local' /tmp/hosts > /tmp/hosts2
+echo "$GITLAB_IP  gitlab.local" >> /tmp/hosts2
+echo "127.0.0.1  argocd.local" >> /tmp/hosts2
+sudo cp /tmp/hosts2 /etc/hosts
 
 # --- Get ArgoCD credentials ---
 PWD_ARGOCD=$(sudo kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
