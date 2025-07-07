@@ -2,7 +2,7 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-	config.vm.box = "generic/alpine319"
+	config.vm.box = "boxomatic/alpine-3.22"
 
 	config.ssh.forward_agent = true
 	config.ssh.insert_key = false
