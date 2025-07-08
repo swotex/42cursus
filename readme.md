@@ -23,5 +23,6 @@
 ### Specialization Project
 | Name                  | Language     | Description       | Note  | Link            |
 | --------------------- | :----------: | ----------------- | :--: | :--: |
-| Darkly                | Web Security |2                  | 125% | [View](https://github.com/swotex/42cursus/tree/darkly)  |
-| Libasm                | Assembly     |2                  | 125% | [View](https://github.com/swotex/42cursus/tree/libasm)  |
+| Darkly                | Web Security |2                  | 125% | [View](https://github.com/swotex/42cursus/tree/darkly)               |
+| Libasm                | Assembly     |2                  | 125% | [View](https://github.com/swotex/42cursus/tree/libasm)               |
+| Inception-of-Things   | IOT          | Déploiement Kubernetes local avec K3s, K3d, Vagrant, et Docker  | 125% | [View](https://github.com/swotex/42cursus/tree/Inception-of-Things)  |
