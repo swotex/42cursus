@@ -53,13 +53,13 @@ echo "⏳ Waiting for ArgoCD to be ready..."
 sudo kubectl wait deployment argocd-server \
   -n argocd \
   --for=condition=Available=True \
-  --timeout=120s
+  --timeout=300s
 
 echo "⏳ Waiting for GitLab to be ready..."
 sudo kubectl wait deployment gitlab-webservice-default \
   -n gitlab \
   --for=condition=Available=True \
-  --timeout=300s
+  --timeout=500s
 
 # --- Retrieve GitLab root password
 GITLAB_ROOT_PWD=$(sudo kubectl -n gitlab get secret gitlab-gitlab-initial-root-password -o jsonpath="{.data.password}" | base64 -d)

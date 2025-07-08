@@ -24,7 +24,7 @@ mkdir -p "$LOCAL_DIR"
 cd "$LOCAL_DIR"
 git init
 cp -r ../repo_content/* .
-git config --global --add safe.directory /media/Inception-of-Things/bonus/tmp_git
+git config --global --add safe.directory /media/bonus/tmp_git
 git remote add origin https://oauth2:$GITLAB_TOKEN@gitlab.local/root/$PROJECT_NAME.git
 git config user.name "root"
 git config user.email "root@example.com"
