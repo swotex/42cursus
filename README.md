@@ -44,5 +44,5 @@ create_repo.sh
 [tdhaussy](https://https://github.com/Rreyth)
 [ltuffery](https://https://github.com/ltuffery)
 
-🏁 Project Status
+### 🏁 Project Status
 Finished. Final score: 125%
