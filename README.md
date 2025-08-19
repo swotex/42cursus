@@ -43,3 +43,6 @@ create_repo.sh
 [njegat](https://https://github.com/swotex)
 [tdhaussy](https://https://github.com/Rreyth)
 [ltuffery](https://https://github.com/ltuffery)
+
+🏁 Project Status
+Finished. Final score: 125%
